@@ -50,4 +50,12 @@ impl Color {
         self.color_tuple.w = 1.0;
         self
     }
+
+    pub fn to_ppm(&self, max_value: i32) -> String {
+        let max_value = max_value as f32;
+        let red = (max_value * self.red().clamp(0.0, 1.0)).round() as i32;
+        let green = (max_value * self.green().clamp(0.0, 1.0)).round() as i32;
+        let blue = (max_value * self.blue().clamp(0.0, 1.0)).round() as i32;
+        format!("{} {} {}", red, green, blue)
+    }
 }
