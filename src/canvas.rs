@@ -1,4 +1,4 @@
-use crate::colors::Color;
+use crate::{colors::Color, utils::remove_suffix};
 
 pub struct Canvas {
     pub pixels: Vec<Vec<Color>>,
@@ -26,10 +26,19 @@ impl Canvas {
         self.pixels.len().try_into().unwrap()
     }
 
-    pub fn write_pixel(&mut self, x: i32, y: i32, color: Color) {
+    // Writes a pixel and returns the written color
+    // If the pixel was out of bounds returns None
+    pub fn write_pixel(&mut self, x: i32, y: i32, color: Color) -> Option<Color> {
+        if !(0..self.height()).contains(&y) {
+            return None;
+        }
+        if !(0..self.width()).contains(&x) {
+            return None
+        }
         let y: usize = y.try_into().unwrap();
         let x: usize = x.try_into().unwrap();
         self.pixels[y][x] = color;
+        Some(color)
     }
 
     pub fn pixel_at(&self, x: i32, y: i32) -> Color {
@@ -56,21 +65,17 @@ impl Canvas {
                     continue;
                 }
                 if line_len + elem_len > 70 {
+                    final_row_text = remove_suffix(final_row_text, " ");
                     final_row_text.push('\n');
                     line_len = 0;
                 }
                 final_row_text.push_str(elem);
                 final_row_text.push(' ');
-                line_len += elem_len;
+                line_len += elem_len + 1;
             }
-            let final_row_text = match final_row_text.strip_prefix(' ') {
-                Some(s) => s,
-                None => &final_row_text,
-            };
+            final_row_text = remove_suffix(final_row_text, " ");
             res.push_str(&format!("{}\n", final_row_text));
         }
-        println!("{res}");
-
         res
     }
 }

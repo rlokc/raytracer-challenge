@@ -84,11 +84,7 @@ mod canvas_tests {
         let actual = canvas.to_ppm();
 
         for (expected_line, actual_line) in expected.lines().take(3).zip(actual.lines()) {
-            match (expected_line, actual_line) {
-                (l1, l2) => {
-                    assert_eq!(l1, l2);
-                }
-            }
+            assert_eq!(expected_line, actual_line);
         }
     }
 
@@ -106,6 +102,49 @@ mod canvas_tests {
 
 
         canvas.to_ppm();
+    }
+
+    #[test]
+    fn canvas_line_split() {
+        let mut canvas = Canvas::new(10, 2);
+
+        let c = Color::new(1.0, 0.8, 0.6);
+
+        for y in 0..2 {
+            for x in 0..10 {
+                canvas.write_pixel(x, y, c).unwrap();
+            }
+        }
+
+        let expected_lines = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+153 255 204 153 255 204 153 255 204 153 255 204 153
+255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204
+153 255 204 153 255 204 153 255 204 153 255 204 153";
+
+        let actual = canvas.to_ppm();
+
+        let actual_lines_iter = actual.lines().skip(3);
+        for (expected_line, actual_line) in expected_lines.lines().zip(actual_lines_iter) {
+            assert_eq!(expected_line, actual_line);
+        }
+    }
+
+    #[test]
+    fn canvas_ppm_ends_with_newline() {
+        let canvas = Canvas::new(5, 3);
+        let actual = canvas.to_ppm();
+
+        let last_char = actual.chars().last().unwrap();
+        assert_eq!(last_char, '\n');
+    }
+
+    #[test]
+    fn canvas_writing_out_of_bounds_returns_none() {
+        let mut canvas = Canvas::new(5, 3);
+        let c = Color::new(1.0, 0.8, 0.6);
+
+        let res = canvas.write_pixel(-5, -5, c);
+        assert!(res.is_none());
     }
 
 }
