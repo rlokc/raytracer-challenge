@@ -1,3 +1,5 @@
+use std::{fs::File, io::Write};
+
 use crate::{colors::Color, utils::remove_suffix};
 
 pub struct Canvas {
@@ -77,5 +79,10 @@ impl Canvas {
             res.push_str(&format!("{}\n", final_row_text));
         }
         res
+    }
+
+    pub fn to_ppm_file(&self, path: &str) -> std::io::Result<()> {
+        let mut file = File::create(path)?;
+        file.write_all(self.to_ppm().as_bytes())
     }
 }

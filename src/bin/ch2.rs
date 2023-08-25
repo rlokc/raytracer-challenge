@@ -4,14 +4,15 @@ fn draw_trajectory(canvas: &mut Canvas, projectile: &Projectile) {
     let trajectory_color = Color::new(0.8, 0.3, 0.3);
 
     let x = projectile.position.x.round() as i32;
-    let y = projectile.position.y.round() as i32;
+    let mut y = projectile.position.y.round() as i32;
+    y = canvas.height() - y;
     canvas.write_pixel(x, y, trajectory_color);
 }
 
 pub fn main() {
     let mut p = Projectile {
         position: Tuple::point(0.0, 1.0, 0.0),
-        velocity: Tuple::vector(1.0, 5.0, 0.0).normalize(),
+        velocity: Tuple::vector(1.0, 1.8, 0.0).normalize().scalar_mul(11.25),
     };
     let e = Environment {
         gravity: Tuple::vector(0.0, -0.1, 0.0),
@@ -29,5 +30,8 @@ pub fn main() {
 
         draw_trajectory(&mut canvas, &p);
     }
+
+    canvas.to_ppm_file("output.ppm").unwrap();
+
     println!("Done after {:?} ticks", n_ticks)
 }
