@@ -43,14 +43,9 @@ impl Matrix {
     }
 
     pub fn identity_matrix(dimensions: usize) -> Matrix {
-        let mut vals: Vec<Vec<f32>> = Vec::with_capacity(dimensions);
+        let mut vals = vec![vec![0.0; dimensions]; dimensions];
         for i in 0..dimensions {
-            let mut v: Vec<f32> = Vec::with_capacity(dimensions);
-            for j in 0..dimensions {
-                let val = if i == j { 1.0 } else { 0.0 } as f32;
-                v.push(val);
-            }
-            vals.push(v);
+                vals[i][i] = 1.0;
         }
         Matrix { vals }
     }
@@ -95,18 +90,16 @@ impl Matrix {
 
     pub fn mat_mul(&self, other: &Matrix) -> Matrix {
         assert_eq!(self.n_columns(), other.n_rows());
-        let mut res: Vec<Vec<f32>> = Vec::with_capacity(self.n_rows());
+        let mut res = vec![vec![0.0; other.n_columns()]; self.n_rows()];
 
         for i in 0..self.n_rows() {
-            let mut v: Vec<f32> = Vec::with_capacity(other.n_columns());
             for j in 0..other.n_columns() {
                 let mut acc = 0.0 as f32;
                 for k in 0..self.n_columns() {
                     acc += self.get(i, k) * other.get(k, j);
                 }
-                v.push(acc);
+                res[i][j] = acc;
             }
-            res.push(v);
         }
         Matrix { vals: res }
     }
