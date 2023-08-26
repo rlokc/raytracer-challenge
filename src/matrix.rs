@@ -131,8 +131,15 @@ impl Matrix {
     }
 
     pub fn determinant(&self) -> f32 {
-        let res = self.vals[0][0] * self.vals[1][1] - self.vals[0][1] * self.vals[1][0];
-        res
+        if self.n_rows() == 2 {
+            return self.vals[0][0] * self.vals[1][1] - self.vals[0][1] * self.vals[1][0];
+        } else {
+            let mut acc = 0.0 as f32;
+            for j in 0..self.n_columns() {
+                acc += self.get(0, j) * self.cofactor(0, j);
+            }
+            return acc;
+        }
     }
 
     pub fn submatrix(&self, row_to_remove: usize, col_to_remove: usize) -> Matrix {
@@ -151,6 +158,32 @@ impl Matrix {
             }
         }
         Matrix { vals }
+    }
+
+    pub fn minor(&self, row: usize, column: usize) -> f32 {
+        self.submatrix(row, column).determinant()
+    }
+
+    pub fn cofactor(&self, row: usize, column: usize) -> f32 {
+        let minor = self.minor(row, column);
+        if (row + column) % 2 == 0 { minor } else { -minor }
+    }
+
+    pub fn invert(&self) -> Option<Matrix> {
+        if f32_eq(self.determinant(), 0.0) {
+            return None
+        }
+
+        let det = self.determinant();
+        let mut vals = vec![vec![0.0; self.n_columns()]; self.n_rows()];
+        for i in 0..self.n_rows() {
+            for j in 0..self.n_columns() {
+                let val = self.cofactor(i, j);
+                // Transpose along the way!!!
+                vals[j][i] = val / det;
+            }
+        }
+        return Some(Matrix { vals });
     }
 
 }
