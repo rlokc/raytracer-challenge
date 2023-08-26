@@ -186,4 +186,69 @@ impl Matrix {
         return Some(Matrix { vals });
     }
 
+    pub fn translate(&self, x: f32, y: f32, z: f32) -> Matrix {
+        let mut res = Matrix::identity_matrix(self.n_rows());
+        res.vals[0][3] = x;
+        res.vals[1][3] = y;
+        res.vals[2][3] = z;
+
+        res.mat_mul(&self)
+    }
+
+    pub fn scale(&self, x: f32, y: f32, z: f32) -> Matrix {
+        let mut res = Matrix::identity_matrix(self.n_rows());
+
+        res.vals[0][0] = x;
+        res.vals[1][1] = y;
+        res.vals[2][2] = z;
+
+        res.mat_mul(&self)
+    }
+
+    pub fn rotate_x(&self, rad: f32) -> Matrix {
+        let mut res = Matrix::identity_matrix(self.n_rows());
+
+        res.vals[1][1] = rad.cos();
+        res.vals[1][2] = -rad.sin();
+        res.vals[2][1] = rad.sin();
+        res.vals[2][2] = rad.cos();
+
+        res.mat_mul(&self)
+    }
+
+    pub fn rotate_y(&self, rad: f32) -> Matrix {
+        let mut res = Matrix::identity_matrix(self.n_rows());
+
+        res.vals[0][0] = rad.cos();
+        res.vals[0][2] = rad.sin();
+        res.vals[2][0] = -rad.sin();
+        res.vals[2][2] = rad.cos();
+
+        res.mat_mul(&self)
+    }
+
+    pub fn rotate_z(&self, rad: f32) -> Matrix {
+        let mut res = Matrix::identity_matrix(self.n_rows());
+
+        res.vals[0][0] = rad.cos();
+        res.vals[0][1] = -rad.sin();
+        res.vals[1][0] = rad.sin();
+        res.vals[1][1] = rad.cos();
+
+        res.mat_mul(&self)
+    }
+
+    pub fn shear(&self, xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
+        let mut res = Matrix::identity_matrix(self.n_rows());
+
+        res.vals[0][1] = xy;
+        res.vals[0][2] = xz;
+        res.vals[1][0] = yx;
+        res.vals[1][2] = yz;
+        res.vals[2][0] = zx;
+        res.vals[2][1] = zy;
+
+        self.mat_mul(&res)
+    }
+
 }
