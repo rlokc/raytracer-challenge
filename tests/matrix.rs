@@ -61,7 +61,7 @@ mod matrix_tests {
 
         let m1 = Matrix::new_from_string(s);
         let m2 = Matrix::new_from_string(s);
-        assert!(m1.equals(&m2));
+        assert_eq!(m1, m2);
     }
 
     #[test]
@@ -83,7 +83,7 @@ mod matrix_tests {
         let m1 = Matrix::new_from_string(s1);
         let m2 = Matrix::new_from_string(s2);
 
-        assert!(!m1.equals(&m2));
+        assert_ne!(m1, m2);
     }
 
     #[test]
@@ -114,8 +114,7 @@ mod matrix_tests {
         let expected = Matrix::new_from_string(smul);
         let actual = m1.mat_mul(&m2);
 
-        assert!(actual.equals(&expected));
-
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -133,7 +132,7 @@ mod matrix_tests {
         let expected = Tuple::new(18.0, 24.0, 33.0, 1.0);
         let actual = m.tuple_mul(&t);
 
-        assert!(expected.equals(actual))
+        assert_eq!(expected, actual);
     }
 
     #[test]
@@ -148,7 +147,7 @@ mod matrix_tests {
         let m = Matrix::new_from_string(s);
         let id = Matrix::identity_matrix(4);
 
-        assert!(m.mat_mul(&id).equals(&m));
+        assert_eq!(m.mat_mul(&id), m);
     }
 
     #[test]
@@ -170,13 +169,45 @@ mod matrix_tests {
         let m = Matrix::new_from_string(s);
         let expected = Matrix::new_from_string(transposed);
         let actual = m.transpose();
-        assert!(actual.equals(&expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
     pub fn transpose_identity() {
         let id = Matrix::identity_matrix(4);
         let transposed = id.transpose();
-        assert!(transposed.equals(&id));
+        assert_eq!(transposed, id);
+    }
+
+    #[test]
+    pub fn determinant() {
+        let s = "
+        | 1 | 5 |
+        | -3 | 2 |
+        ";
+
+        let m = Matrix::new_from_string(s);
+        let actual = m.determinant();
+        assert!(f32_eq(actual, 17.0));
+    }
+
+    #[test]
+    pub fn submatrix_3x3() {
+        let s = "
+        | 1 | 5 | 0 |
+        | -3 | 2 | 7 |
+        | 0 | 6 | -3 |
+        ";
+
+        let expected = "
+        | -3 | 2 |
+        | 0 | 6 |
+        ";
+
+        let m = Matrix::new_from_string(s);
+        let expected = Matrix::new_from_string(expected);
+
+        let actual = m.submatrix(0, 2);
+        assert_eq!(expected, actual);
     }
 }

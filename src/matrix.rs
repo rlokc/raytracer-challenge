@@ -12,6 +12,16 @@ fn debug_print<T: Debug>(val: T) -> T {
     val
 }
 
+impl PartialEq for Matrix {
+    fn eq(&self, other: &Self) -> bool {
+        self.equals(other)
+    }
+
+    fn ne(&self, other: &Self) -> bool {
+        !self.equals(other)
+    }
+}
+
 impl Matrix {
     pub fn new_from_string(vals: &str) -> Matrix {
         /*
@@ -115,6 +125,29 @@ impl Matrix {
         for i in 0..self.n_rows() {
             for j in 0..self.n_columns() {
                 vals[j][i] = self.vals[i][j];
+            }
+        }
+        Matrix { vals }
+    }
+
+    pub fn determinant(&self) -> f32 {
+        let res = self.vals[0][0] * self.vals[1][1] - self.vals[0][1] * self.vals[1][0];
+        res
+    }
+
+    pub fn submatrix(&self, row_to_remove: usize, col_to_remove: usize) -> Matrix {
+        let mut vals = vec![vec![0.0; self.n_columns() - 1]; self.n_rows() - 1];
+        for i in 0..self.n_rows() {
+            if i == row_to_remove {
+                continue;
+            };
+            for j in 0..self.n_columns() {
+                if j == col_to_remove { 
+                    continue;
+                }
+                let res_i = if i > row_to_remove { i - 1 } else { i };
+                let res_j = if j > col_to_remove { j - 1 } else { j };
+                vals[res_i][res_j] = self.get(i, j);
             }
         }
         Matrix { vals }

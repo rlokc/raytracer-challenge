@@ -8,6 +8,16 @@ pub struct Tuple {
     pub w: f32,
 }
 
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Self) -> bool {
+        self.equals(other)
+    }
+
+    fn ne(&self, other: &Self) -> bool {
+        !self.equals(other)
+    }
+}
+
 impl Tuple {
     pub fn new(x: f32, y: f32, z: f32, w: f32) -> Tuple {
         Tuple { x, y, z, w }
@@ -21,7 +31,7 @@ impl Tuple {
         Tuple { x, y, z, w: 0.0 }
     }
 
-    pub fn equals(&self, other: Tuple) -> bool {
+    pub fn equals(&self, other: &Tuple) -> bool {
         f32_eq(self.x, other.x)
             && f32_eq(self.y, other.y)
             && f32_eq(self.z, other.z)

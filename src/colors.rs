@@ -24,7 +24,7 @@ impl Color {
     }
 
     pub fn equals(&self, other: Color) -> bool {
-        self.color_tuple.equals(other.color_tuple)
+        self.color_tuple == other.color_tuple
     }
 
     pub fn add(&self, other: Color) -> Color {

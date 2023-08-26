@@ -45,7 +45,7 @@ mod tuple_tests {
             z: 3.0,
             w: 1.0,
         };
-        assert!(a.equals(expected))
+        assert_eq!(a, expected);
     }
 
     #[test]
@@ -57,7 +57,7 @@ mod tuple_tests {
             z: 3.0,
             w: 0.0,
         };
-        assert!(a.equals(expected))
+        assert_eq!(a, expected);
     }
 
     #[test]
@@ -81,7 +81,7 @@ mod tuple_tests {
             w: 1.0
         };
         let actual = a.add(b);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -90,7 +90,7 @@ mod tuple_tests {
         let b = Tuple::point(5.0, 6.0, 7.0);
         let expected = Tuple::vector(-2.0, -4.0, -6.0);
         let actual = a.sub(b);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -99,7 +99,7 @@ mod tuple_tests {
         let vector = Tuple::vector(5.0, 6.0, 7.0);
         let expected = Tuple::point(-2.0, -4.0, -6.0);
         let actual = point.sub(vector);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -108,7 +108,7 @@ mod tuple_tests {
         let vec2 = Tuple::vector(5.0, 6.0, 7.0);
         let expected = Tuple::vector(-2.0, -4.0, -6.0);
         let actual = vec1.sub(vec2);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -116,7 +116,7 @@ mod tuple_tests {
         let a = Tuple{x: 1.0, y: -2.0, z: 3.0, w: -4.0};
         let expected = Tuple{x: -1.0, y: 2.0, z: -3.0, w: 4.0};
         let actual = a.negate();
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -125,7 +125,7 @@ mod tuple_tests {
         let mul = 3.5;
         let expected = Tuple::new(3.5, -7.0, 10.5, -14.0);
         let actual = a.scalar_mul(mul);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -134,7 +134,7 @@ mod tuple_tests {
         let mul = 0.5;
         let expected = Tuple::new(0.5, -1.0, 1.5, -2.0);
         let actual = a.scalar_mul(mul);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
         
     #[test]
@@ -142,7 +142,7 @@ mod tuple_tests {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let actual = a.scalar_div(2.0);
         let expected = Tuple::new(0.5, -1.0, 1.5, -2.0);
-        assert!(actual.equals(expected));
+        assert_eq!(actual, expected);
     }
 
     #[test]
@@ -157,12 +157,12 @@ mod tuple_tests {
     fn test_normalization() {
         let v1 = Tuple::vector(4.0, 0.0, 0.0);
         let v1_normalized = Tuple::vector(1.0, 0.0, 0.0);
-        assert!(v1.normalize().equals(v1_normalized));
+        assert_eq!(v1.normalize(), v1_normalized);
 
         let v2 = Tuple::vector(1.0, 2.0, 3.0);
         let sq = 14.0_f32.sqrt();
         let v2_normalized = Tuple::vector(1.0/sq, 2.0/sq, 3.0/sq);
-        assert!(v2.normalize().equals(v2_normalized));
+        assert_eq!(v2.normalize(), v2_normalized);
     }
 
     #[test]
@@ -186,8 +186,8 @@ mod tuple_tests {
         let cross_ab = Tuple::vector(-1.0, 2.0, -1.0);
         let cross_ba = Tuple::vector(1.0, -2.0, 1.0);
 
-        assert!(a.cross(b).equals(cross_ab));
-        assert!(b.cross(a).equals(cross_ba));
+        assert_eq!(a.cross(b), cross_ab);
+        assert_eq!(b.cross(a), cross_ba);
     }
 
 }
