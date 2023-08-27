@@ -4,3 +4,7 @@ pub mod utils;
 pub mod bin_utils;
 pub mod canvas;
 pub mod matrix;
+pub mod ray;
+pub mod sphere;
+pub mod scene_object;
+pub mod intersection;
