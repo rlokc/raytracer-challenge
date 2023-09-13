@@ -1,7 +1,7 @@
 
 use std::sync::Arc;
 
-use crate::{tuple::Tuple, scene_object::{SceneObject, self}, intersection::{Intersections, Intersection}};
+use crate::{tuple::Tuple, scene_object::SceneObject, intersection::{Intersections, Intersection}, matrix::Matrix};
 
 
 #[derive(Debug, Clone)]
@@ -46,8 +46,15 @@ impl Ray {
 
         let t1 = (-b - discriminant.sqrt()) / (2.0 * a);
         let t2 = (-b + discriminant.sqrt()) / (2.0 * a);
-        res.push(Intersection::new(t1, scene_object.clone()));
-        res.push(Intersection::new(t2, scene_object.clone()));
+        
+        res.push(Arc::new(Intersection::new(t1, scene_object.clone())));
+        res.push(Arc::new(Intersection::new(t2, scene_object.clone())));
         return res;
+    }
+
+    pub fn transform(&self, transformation_matrix: &Matrix) -> Self {
+        let new_origin = transformation_matrix.tuple_mul(&self.origin);
+        let new_direction = transformation_matrix.tuple_mul(&self.direction);
+        Ray::new(new_origin, new_direction)
     }
 }
