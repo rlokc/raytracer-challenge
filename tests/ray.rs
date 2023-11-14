@@ -1,8 +1,8 @@
 #[cfg(test)]
 mod ray_tests {
-    use std::sync::{Arc, Mutex};
+    use std::sync::Arc;
 
-    use raytracer::{tuple::Tuple, ray::Ray, sphere::sphere, intersection::{Intersection, Intersections}, matrix::Matrix};
+    use raytracer::{tuple::Tuple, ray::Ray, sphere::sphere, intersection::{Intersection, Intersections, intersect}, matrix::Matrix};
 
     #[test]
     fn ray_creation() {
@@ -103,9 +103,11 @@ mod ray_tests {
         let r = Ray::new_flat(0.0, 0.0, -5.0, 0.0, 0.0, 1.0);
 
         let xs = r.intersect(s.clone());
+        let expected_id = s.lock().unwrap().id();
+
         assert_eq!(xs.len(), 2);
-        assert_eq!(xs[0].scene_object.id(), s.id());
-        assert_eq!(xs[1].scene_object.id(), s.id());
+        assert_eq!(xs[0].scene_object.lock().unwrap().id(), expected_id);
+        assert_eq!(xs[1].scene_object.lock().unwrap().id(), expected_id);
     }
 
     #[test]
@@ -193,19 +195,50 @@ mod ray_tests {
     fn sphere_default() {
         let s = sphere();
 
-        assert!(s.transformation().get_mut().unwrap().equals(&Matrix::identity_matrix(4)));
+        assert!(s.lock().unwrap().transformation().equals(&Matrix::identity_matrix(4)));
     }
 
     #[test]
     fn sphere_transformation() {
-        let mut s = sphere();
+        let s = sphere();
 
         let t = Matrix::identity_matrix(4).translate(2.0, 3.0, 4.0);
 
-        s.set_transformation(Arc::new(Mutex::new(t)));
+        s.lock().unwrap().set_transformation(&t);
+    }
+
+    #[test]
+    fn scaled_sphere_interset() {
+        let s = sphere();
+
+        let r = Ray::new_flat(0.0, 0.0, -5.0, 0.0, 0.0, 1.0);
+        let t = Matrix::identity_matrix(4).scale(2.0, 2.0, 2.0);
+
+        let i1 = Arc::new(Intersection::new(3.0, s.clone()));
+        let i2 = Arc::new(Intersection::new(7.0, s.clone()));
+        let mut expected = Intersections::new();
+        expected.push(i1).push(i2);
+
+        s.lock().unwrap().set_transformation(&t);
+        
+        let actual = intersect(s, r);
+        assert_eq!(actual.len(), expected.len());
+        assert_eq!(actual[0].t, expected[0].t);
+        assert_eq!(actual[1].t, expected[1].t);
     }
 
 
+    #[test]
+    fn translated_sphere_interset() {
+        let s = sphere();
 
+        let r = Ray::new_flat(0.0, 0.0, -5.0, 0.0, 0.0, 1.0);
+        let t = Matrix::identity_matrix(4).translate(5.0, 0.0, 0.0);
+
+        s.lock().unwrap().set_transformation(&t);
+        
+        let actual = intersect(s, r);
+        assert_eq!(actual.len(), 0);
+    }
 
 }

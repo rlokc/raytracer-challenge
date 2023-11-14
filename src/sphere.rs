@@ -1,4 +1,4 @@
-use std::{sync::{Arc, Mutex}, ops::DerefMut};
+use std::sync::{Arc, Mutex};
 
 use crate::{scene_object::SceneObject, matrix::Matrix};
 use rand::Rng;
@@ -6,7 +6,7 @@ use rand::Rng;
 #[derive(Debug, Clone)]
 pub struct Sphere {
     id: i32,
-    pub transform: Arc<Mutex<Matrix>>,
+    pub transform: Matrix,
 }
 
 impl SceneObject for Sphere {
@@ -14,12 +14,12 @@ impl SceneObject for Sphere {
         self.id
     }
 
-    fn transformation(&self) -> Arc<Mutex<Matrix>> {
+    fn transformation(&self) -> Matrix {
         self.transform.clone()
     }
 
-    fn set_transformation(&mut self, transform: Arc<Mutex<Matrix>>) {
-        self.transform = transform
+    fn set_transformation(&mut self, transform: &Matrix) {
+        self.transform = transform.clone()
     }
 }
 
@@ -28,11 +28,11 @@ impl Sphere {
         let mut rng = rand::thread_rng();
         Sphere { 
             id: rng.gen::<i32>(),
-            transform: Arc::new(Mutex::new(Matrix::identity_matrix(4)))
+            transform: Matrix::identity_matrix(4)
         }
     }
 }
 
-pub fn sphere() -> Arc<Box<dyn SceneObject>> {
-    Arc::new(Box::new(Sphere::new()))
+pub fn sphere() -> Arc<Mutex<Box<dyn SceneObject>>> {
+    Arc::new(Mutex::new(Box::new(Sphere::new())))
 }

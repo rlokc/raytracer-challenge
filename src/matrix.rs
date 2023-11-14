@@ -55,7 +55,7 @@ impl Matrix {
     pub fn identity_matrix(dimensions: usize) -> Matrix {
         let mut vals = vec![vec![0.0; dimensions]; dimensions];
         for i in 0..dimensions {
-                vals[i][i] = 1.0;
+            vals[i][i] = 1.0;
         }
         Matrix { vals }
     }
