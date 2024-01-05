@@ -7,10 +7,10 @@ pub struct Matrix {
     pub vals: Vec<Vec<f32>>
 }
 
-fn debug_print<T: Debug>(val: T) -> T {
-    println!("{:?}", val);
-    val
-}
+// fn debug_print<T: Debug>(val: T) -> T {
+//     println!("{:?}", val);
+//     val
+// }
 
 impl PartialEq for Matrix {
     fn eq(&self, other: &Self) -> bool {
