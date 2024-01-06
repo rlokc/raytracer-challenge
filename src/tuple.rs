@@ -115,4 +115,9 @@ impl Tuple {
     pub fn is_vector(&self) -> bool {
         return self.w == 0.0;
     }
+
+    pub fn reflect(&self, normal: Tuple) -> Tuple {
+        let dot = self.dot(normal);
+        self.sub(normal.scalar_mul(2.0).scalar_mul(dot))
+    }
 }

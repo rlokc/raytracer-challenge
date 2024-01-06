@@ -8,3 +8,6 @@ pub mod ray;
 pub mod sphere;
 pub mod scene_object;
 pub mod intersection;
+pub mod transformations;
+pub mod light;
+pub mod material;

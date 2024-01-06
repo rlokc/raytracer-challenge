@@ -5,6 +5,12 @@ pub struct Color {
     pub color_tuple: Tuple,
 }
 
+impl PartialEq for Color {
+    fn eq(&self, other: &Self) -> bool {
+        return self.color_tuple == other.color_tuple
+    }
+}
+
 impl Color {
     pub fn new(red: f32, green: f32, blue: f32) -> Color {
         let t = Tuple::point(red, green, blue);

@@ -4,7 +4,7 @@ use std::sync::{Arc, Mutex};
 use crate::{tuple::Tuple, scene_object::SceneObject, intersection::{Intersections, Intersection}, matrix::Matrix};
 
 
-#[derive(Debug, Clone)]
+#[derive(Copy, Debug, Clone)]
 pub struct Ray {
     pub origin: Tuple,
     pub direction: Tuple,
