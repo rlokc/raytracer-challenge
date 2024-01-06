@@ -1,4 +1,5 @@
 use std::{fs::File, io::Write};
+use std::io::BufWriter;
 
 use crate::{colors::Color, utils::remove_suffix};
 
@@ -79,6 +80,25 @@ impl Canvas {
             res.push_str(&format!("{}\n", final_row_text));
         }
         res
+    }
+
+    pub fn to_png_file(&self, path: &str) {
+        let file = File::create(path).unwrap();
+        let ref mut w = BufWriter::new(file);
+
+        let mut encoder = png::Encoder::new(w, self.width() as u32, self.height() as u32);
+        encoder.set_color(png::ColorType::Rgb);
+        encoder.set_depth(png::BitDepth::Eight);
+        // encoder.set_source_gamma(png::ScaledFloat::from_scaled(45455));
+        let mut writer = encoder.write_header().unwrap();
+
+        let mut stream_writer = writer.stream_writer().unwrap();
+        for row in self.pixels.iter() {
+            for pixel in row.iter() {
+                stream_writer.write(&pixel.to_rgb()).unwrap();
+            }
+        }
+        stream_writer.finish().unwrap();
     }
 
     pub fn to_ppm_file(&self, path: &str) -> std::io::Result<()> {

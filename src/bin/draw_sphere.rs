@@ -5,7 +5,6 @@ use raytracer::light::{lighting, PointLight};
 use raytracer::material::Material;
 use raytracer::ray::Ray;
 use raytracer::sphere::{sphere};
-use raytracer::transformations::shear;
 use raytracer::tuple::Tuple;
 
 pub fn main() {
@@ -28,8 +27,8 @@ pub fn main() {
     shape.lock().unwrap().set_material(&material);
 
     // Add a transformation
-    let transform = shear(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-    shape.lock().unwrap().set_transformation(&transform);
+    // let transform = shear(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    // shape.lock().unwrap().set_transformation(&transform);
 
     // Set up the light
     let light_position = Tuple::point(-10.0, 10.0, -10.0);
@@ -64,5 +63,5 @@ pub fn main() {
     }
 
     println!("Flushing image to file");
-    canvas.to_ppm_file("sphere.ppm").unwrap();
+    canvas.to_png_file("sphere.png");
 }

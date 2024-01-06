@@ -11,3 +11,4 @@ pub mod intersection;
 pub mod transformations;
 pub mod light;
 pub mod material;
+pub mod world;

@@ -64,4 +64,12 @@ impl Color {
         let blue = (max_value * self.blue().clamp(0.0, 1.0)).round() as i32;
         format!("{} {} {}", red, green, blue)
     }
+
+    pub fn to_rgb(&self) -> [u8; 3] {
+        let max_value = 255f32;
+        let red = (max_value * self.red().clamp(0.0, 1.0)).round() as u8;
+        let green = (max_value * self.green().clamp(0.0, 1.0)).round() as u8;
+        let blue = (max_value * self.blue().clamp(0.0, 1.0)).round() as u8;
+        [red, green, blue]
+    }
 }
