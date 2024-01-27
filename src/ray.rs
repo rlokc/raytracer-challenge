@@ -1,7 +1,8 @@
 
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
-use crate::{tuple::Tuple, scene_object::SceneObject, intersection::{Intersections, Intersection}, matrix::Matrix};
+use crate::{tuple::Tuple, intersection::{Intersections, Intersection}, matrix::Matrix};
+use crate::scene_object::MutSceneObject;
 
 
 #[derive(Copy, Debug, Clone)]
@@ -27,7 +28,7 @@ impl Ray {
         self.origin.add(self.direction.scalar_mul(time))
     }
 
-    pub fn intersect(&self, scene_object: Arc<Mutex<Box<dyn SceneObject>>>) -> Intersections {
+    pub fn intersect(&self, scene_object: MutSceneObject) -> Intersections {
 
         let mut res  = Intersections::new();
 

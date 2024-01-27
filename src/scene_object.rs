@@ -1,4 +1,5 @@
 use std::fmt::Debug;
+use std::sync::{Arc, Mutex};
 use crate::material::Material;
 
 use crate::matrix::Matrix;
@@ -12,3 +13,5 @@ pub trait SceneObject: Debug {
     fn material(&self) -> Material;
     fn set_material(&mut self, material: &Material);
 }
+
+pub type MutSceneObject =  Arc<Mutex<Box<dyn SceneObject>>>;

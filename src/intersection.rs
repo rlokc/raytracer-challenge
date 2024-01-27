@@ -1,12 +1,24 @@
-use std::{sync::{Arc, Mutex}, ops::Index};
+use std::{ops::Index, sync::Arc};
 
-use crate::{scene_object::SceneObject, ray::Ray};
-
+use crate::{ray::Ray, scene_object::SceneObject};
+use crate::scene_object::MutSceneObject;
+use crate::tuple::Tuple;
+use crate::world::World;
 
 #[derive(Debug)]
 pub struct Intersection {
     pub t: f32,
-    pub scene_object: Arc<Mutex<Box<dyn SceneObject>>>,
+    pub scene_object: MutSceneObject,
+}
+
+#[derive(Debug)]
+pub struct IntersectionPrecomputations {
+    pub t: f32,
+    pub scene_object: MutSceneObject,
+    pub point: Tuple, // in world space
+    pub eye_vector: Tuple, // pointing back towards the eye
+    pub normal_vector: Tuple,
+    pub is_inside_object: bool,
 }
 
 impl PartialEq for Intersection {
@@ -24,10 +36,10 @@ impl PartialEq for Intersection {
 }
 
 impl Intersection {
-    pub fn new(t: f32, scene_object: Arc<Mutex<Box<dyn SceneObject>>>) -> Intersection {
+    pub fn new(t: f32, scene_object: MutSceneObject) -> Intersection {
         Intersection {
             t,
-            scene_object: scene_object,
+            scene_object,
         }
     }
 }
@@ -54,6 +66,10 @@ impl Intersections {
         self
     }
 
+    pub fn concat(&mut self, mut other: Intersections) {
+        self.values.append(other.values.as_mut());
+    }
+
     pub fn len(&self) -> usize {
         self.values.len()
     }
@@ -65,13 +81,41 @@ impl Intersections {
             .min_by(|i1, i2| i1.t.total_cmp(&i2.t))
             .cloned()
     }
+
+    pub fn sort(&mut self) {
+        self.values.sort_by(|a, b| a.t.total_cmp(&b.t));
+    }
 }
 
-pub fn intersect(so: Arc<Mutex<Box<dyn SceneObject>>>, r: Ray) -> Intersections {
+pub fn intersect(so: MutSceneObject, r: Ray) -> Intersections {
     let mut tf = so.lock().unwrap().transformation();
     tf = tf.invert().unwrap();
     let r = r.transform(&tf);
     r.intersect(so)
 
     // so.get_mut().unwrap().set_transformation()
+}
+
+pub fn intersect_world(world: World, r: Ray) -> Intersections {
+    let mut res = Intersections::new();
+    for obj in world.objects.iter() {
+        res.concat(intersect(obj.clone(), r));
+    }
+    res.sort();
+    res
+}
+
+pub fn prepare_computations(intersection: Intersection, ray: Ray) -> IntersectionPrecomputations {
+    let point = ray.position(intersection.t);
+
+    let is_inside_object = false;
+
+    IntersectionPrecomputations{
+        t: intersection.t,
+        scene_object: intersection.scene_object.clone(),
+        point,
+        eye_vector: ray.direction.negate(),
+        normal_vector: intersection.scene_object.lock().unwrap().normal_at(point),
+        is_inside_object,
+    }
 }

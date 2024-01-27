@@ -3,6 +3,7 @@ use std::sync::{Arc, Mutex};
 use crate::{scene_object::SceneObject, matrix::Matrix};
 use rand::Rng;
 use crate::material::Material;
+use crate::scene_object::MutSceneObject;
 use crate::tuple::Tuple;
 
 #[derive(Debug, Clone)]
@@ -53,6 +54,6 @@ impl Sphere {
     }
 }
 
-pub fn sphere() -> Arc<Mutex<Box<dyn SceneObject>>> {
+pub fn sphere() -> MutSceneObject {
     Arc::new(Mutex::new(Box::new(Sphere::new())))
 }
