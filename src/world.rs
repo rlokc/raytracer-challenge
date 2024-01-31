@@ -1,11 +1,12 @@
 use crate::colors::Color;
 use crate::light::PointLight;
 use crate::material::Material;
-use crate::scene_object::{MutSceneObject, SceneObject};
+use crate::scene_object::{MutSceneObject};
 use crate::sphere::sphere;
 use crate::transformations::scale;
 use crate::tuple::Tuple;
 
+#[derive(Debug)]
 pub struct World {
     pub objects: Vec<MutSceneObject>,
     pub light_sources: Vec<PointLight>,

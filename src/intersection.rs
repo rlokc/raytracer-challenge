@@ -1,6 +1,8 @@
 use std::{ops::Index, sync::Arc};
+use crate::colors::Color;
+use crate::light::lighting;
 
-use crate::{ray::Ray, scene_object::SceneObject};
+use crate::ray::Ray;
 use crate::scene_object::MutSceneObject;
 use crate::tuple::Tuple;
 use crate::world::World;
@@ -96,7 +98,7 @@ pub fn intersect(so: MutSceneObject, r: Ray) -> Intersections {
     // so.get_mut().unwrap().set_transformation()
 }
 
-pub fn intersect_world(world: World, r: Ray) -> Intersections {
+pub fn intersect_world(world: &World, r: Ray) -> Intersections {
     let mut res = Intersections::new();
     for obj in world.objects.iter() {
         res.concat(intersect(obj.clone(), r));
@@ -105,17 +107,46 @@ pub fn intersect_world(world: World, r: Ray) -> Intersections {
     res
 }
 
-pub fn prepare_computations(intersection: Intersection, ray: Ray) -> IntersectionPrecomputations {
+pub fn prepare_computations(intersection: Arc<Intersection>, ray: Ray) -> IntersectionPrecomputations {
     let point = ray.position(intersection.t);
 
-    let is_inside_object = false;
+    let eye_vector = ray.direction.negate();
+    let mut normal_vector = intersection.scene_object.lock().unwrap().normal_at(point);
+
+    let mut is_inside_object = false;
+
+    if normal_vector.dot(eye_vector) < 0.0 {
+        is_inside_object = true;
+        normal_vector = normal_vector.negate();
+    }
 
     IntersectionPrecomputations{
         t: intersection.t,
         scene_object: intersection.scene_object.clone(),
         point,
-        eye_vector: ray.direction.negate(),
-        normal_vector: intersection.scene_object.lock().unwrap().normal_at(point),
+        eye_vector,
+        normal_vector,
         is_inside_object,
+    }
+}
+
+pub fn shade_hit(world: &World, precomputed: &IntersectionPrecomputations) -> Color {
+    lighting(
+        &precomputed.scene_object.lock().unwrap().material(),
+        &world.light_sources[0],
+        precomputed.point,
+        precomputed.eye_vector,
+        precomputed.normal_vector
+    )
+}
+
+pub fn color_at(world: &World, ray: Ray) -> Color {
+    let intersections = intersect_world(world, ray);
+    match intersections.hit() {
+        None => Color::new(0.0, 0.0, 0.0),
+        Some(intersection) => {
+            let precomputed = prepare_computations(intersection, ray);
+            shade_hit(&world, &precomputed)
+        }
     }
 }
