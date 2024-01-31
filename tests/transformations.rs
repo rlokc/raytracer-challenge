@@ -3,6 +3,7 @@ mod transformation_tests {
     use std::f32::consts::PI;
 
     use raytracer::{matrix::Matrix, tuple::Tuple};
+    use raytracer::transformations::{scale, translate, view_transform};
 
     #[test]
     pub fn translation_test() {
@@ -206,6 +207,58 @@ mod transformation_tests {
             .scale(5.0, 5.0, 5.0)
             .translate(10.0, 5.0, 7.0);
         assert_eq!(t_var2.tuple_mul(&p), p4);
+    }
 
+    #[test]
+    pub fn view_transform_default() {
+        let from = Tuple::point(0.0, 0.0, 0.0);
+        let to = Tuple::point(0.0, 0.0, -1.0);
+        let up = Tuple::vector(0.0, 1.0, 0.0);
+
+        let actual = view_transform(from, to, up);
+        let expected = Matrix::identity_matrix(4);
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    pub fn view_transform_positive_z() {
+        let from = Tuple::point(0.0, 0.0, 0.0);
+        let to = Tuple::point(0.0, 0.0, 1.0);
+        let up = Tuple::vector(0.0, 1.0, 0.0);
+
+        let actual = view_transform(from, to, up);
+        let expected = scale(-1.0, 1.0, -1.0);
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    pub fn view_transform_move_world() {
+        let from = Tuple::point(0.0, 0.0, 8.0);
+        let to = Tuple::point(0.0, 0.0, 0.0);
+        let up = Tuple::vector(0.0, 1.0, 0.0);
+
+        let actual = view_transform(from, to, up);
+        let expected = translate(0.0, 0.0, -8.0);
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    pub fn view_transform_arbitrary() {
+        let from = Tuple::point(1.0, 3.0, 2.0);
+        let to = Tuple::point(4.0, -2.0, 8.0);
+        let up = Tuple::vector(1.0, 1.0, 0.0);
+
+        let actual = view_transform(from, to, up);
+        let expected = Matrix::new_from_string("
+| -0.50709 | 0.50709 | 0.67612 | -2.36643 |
+| 0.76772 | 0.60609 | 0.12122 | -2.82843 |
+| -0.35857 | 0.59761 | -0.71714 | 0.00000 |
+| 0.00000 | 0.00000 | 0.00000 | 1.00000 |
+        ");
+
+        assert_eq!(actual, expected);
     }
 }
