@@ -3,8 +3,8 @@ use raytracer::{bin_utils::{Projectile, Environment, tick}, tuple::Tuple, colors
 fn draw_trajectory(canvas: &mut Canvas, projectile: &Projectile) {
     let trajectory_color = Color::new(0.8, 0.3, 0.3);
 
-    let x = projectile.position.x.round() as i32;
-    let mut y = projectile.position.y.round() as i32;
+    let x = projectile.position.x.round() as usize;
+    let mut y = projectile.position.y.round() as usize;
     y = canvas.height() - y;
     canvas.write_pixel(x, y, trajectory_color);
 }

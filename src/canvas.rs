@@ -8,7 +8,7 @@ pub struct Canvas {
 }
 
 impl Canvas {
-    pub fn new(width: i32, height: i32) -> Canvas {
+    pub fn new(width: usize, height: usize) -> Canvas {
         let mut pixels = Vec::with_capacity(height.try_into().unwrap());
         for _ in 0..height {
             let mut row = Vec::with_capacity(width.try_into().unwrap());
@@ -21,17 +21,17 @@ impl Canvas {
         Canvas {pixels}
     }
 
-    pub fn width(&self) -> i32 {
+    pub fn width(&self) -> usize {
         self.pixels[0].len().try_into().unwrap()
     }
 
-    pub fn height(&self) -> i32 {
+    pub fn height(&self) -> usize {
         self.pixels.len().try_into().unwrap()
     }
 
     // Writes a pixel and returns the written color
     // If the pixel was out of bounds returns None
-    pub fn write_pixel(&mut self, x: i32, y: i32, color: Color) -> Option<Color> {
+    pub fn write_pixel(&mut self, x: usize, y: usize, color: Color) -> Option<Color> {
         if !(0..self.height()).contains(&y) {
             return None;
         }

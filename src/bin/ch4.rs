@@ -2,7 +2,7 @@ use std::f32::consts::PI;
 
 use raytracer::{canvas::Canvas, colors::Color, matrix::Matrix, tuple::Tuple};
 
-const CANVAS_SIZE: i32 = 400;
+const CANVAS_SIZE: usize = 400;
 
 pub fn main() {
 
@@ -18,7 +18,7 @@ pub fn main() {
             .translate(200.0, 200.0, 0.0);
 
         let point = transform.tuple_mul(&p);
-        canvas.write_pixel(point.x.round() as i32, point.y.round() as i32, white);
+        canvas.write_pixel(point.x.round() as usize, point.y.round() as usize, white);
     }
 
     canvas.to_ppm_file("clock.ppm").unwrap();

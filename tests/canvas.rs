@@ -137,14 +137,4 @@ mod canvas_tests {
         let last_char = actual.chars().last().unwrap();
         assert_eq!(last_char, '\n');
     }
-
-    #[test]
-    fn canvas_writing_out_of_bounds_returns_none() {
-        let mut canvas = Canvas::new(5, 3);
-        let c = Color::new(1.0, 0.8, 0.6);
-
-        let res = canvas.write_pixel(-5, -5, c);
-        assert!(res.is_none());
-    }
-
 }
