@@ -1,5 +1,5 @@
 use std::sync::{Arc, Mutex};
-use std::sync::atomic::{ATOMIC_USIZE_INIT, AtomicUsize, Ordering};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::thread;
 use std::time::Duration;
 use crate::camera::Camera;

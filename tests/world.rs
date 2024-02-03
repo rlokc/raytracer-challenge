@@ -28,7 +28,7 @@ mod world_tests {
         let w = World::default_world();
         let ray = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
-        let xs = intersect_world(&w, ray);
+        let xs = intersect_world(Arc::new(w), ray);
 
         assert_eq!(xs.len(), 4);
         assert_eq!(xs[0].t, 4.0);
@@ -86,7 +86,7 @@ mod world_tests {
         let i = Arc::new(Intersection::new(4.0, shape.clone()));
 
         let comps = prepare_computations(i, ray);
-        let color = shade_hit(&w, &comps);
+        let color = shade_hit(Arc::new(w), &comps);
 
         assert_eq!(color, Color::new(0.38066, 0.47583, 0.2855));
     }
@@ -100,7 +100,7 @@ mod world_tests {
         let i = Arc::new(Intersection::new(0.5, shape.clone()));
 
         let comps = prepare_computations(i, ray);
-        let color = shade_hit(&w, &comps);
+        let color = shade_hit(Arc::new(w), &comps);
 
         assert_eq!(color, Color::new(0.90498, 0.90498, 0.90498));
     }
@@ -110,7 +110,7 @@ mod world_tests {
         let w = World::default_world();
         let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 1.0, 0.0));
 
-        let actual = color_at(&w, r);
+        let actual = color_at(Arc::new(w), r);
         let expected = Color::new(0.0, 0.0, 0.0);
 
         assert_eq!(actual, expected);
@@ -121,7 +121,7 @@ mod world_tests {
         let w = World::default_world();
         let r = Ray::new(Tuple::point(0.0, 0.0, -5.0), Tuple::vector(0.0, 0.0, 1.0));
 
-        let actual = color_at(&w, r);
+        let actual = color_at(Arc::new(w), r);
         let expected = Color::new(0.38066, 0.47583, 0.2855);
 
         assert_eq!(actual, expected);
@@ -129,20 +129,21 @@ mod world_tests {
 
     #[test]
     fn test_color_intersection_inside_ray() {
-        let w = World::default_world();
-        let outer = &w.objects[0];
+        let w = Arc::new(World::default_world());
+
+        let outer = &w.clone().objects[0];
         let mut mut1 = outer.lock().unwrap().material();
         mut1.ambient = 1.0;
         outer.lock().unwrap().set_material(&mut1);
 
-        let inner = &w.objects[1];
+        let inner = &w.clone().objects[1];
         let mut mut2 = inner.lock().unwrap().material();
         mut2.ambient = 1.0;
         inner.lock().unwrap().set_material(&mut2);
 
         let r = Ray::new(Tuple::point(0.0, 0.0, 0.75), Tuple::vector(0.0, 0.0, -1.0));
 
-        let actual = color_at(&w, r);
+        let actual = color_at(w.clone(), r);
         let expected = inner.clone().lock().unwrap().material().color;
 
         assert_eq!(actual, expected);

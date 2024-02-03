@@ -3,7 +3,7 @@ mod camera_tests {
     use std::f32::consts::PI;
     use raytracer::camera::Camera;
     use raytracer::matrix::Matrix;
-    use raytracer::transformations::{rotate_y, translate};
+    use raytracer::transformations::{translate};
     use raytracer::tuple::Tuple;
 
     #[test]
