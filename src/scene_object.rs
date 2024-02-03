@@ -5,7 +5,7 @@ use crate::material::Material;
 use crate::matrix::Matrix;
 use crate::tuple::Tuple;
 
-pub trait SceneObject: Debug {
+pub trait SceneObject: Debug + Send {
     fn id(&self) -> i32;
     fn transformation(&self) -> Matrix;
     fn set_transformation(&mut self, transform: &Matrix);

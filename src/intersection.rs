@@ -98,7 +98,7 @@ pub fn intersect(so: MutSceneObject, r: Ray) -> Intersections {
     // so.get_mut().unwrap().set_transformation()
 }
 
-pub fn intersect_world(world: &World, r: Ray) -> Intersections {
+pub fn intersect_world(world: Arc<World>, r: Ray) -> Intersections {
     let mut res = Intersections::new();
     for obj in world.objects.iter() {
         res.concat(intersect(obj.clone(), r));
@@ -130,7 +130,7 @@ pub fn prepare_computations(intersection: Arc<Intersection>, ray: Ray) -> Inters
     }
 }
 
-pub fn shade_hit(world: &World, precomputed: &IntersectionPrecomputations) -> Color {
+pub fn shade_hit(world: Arc<World>, precomputed: &IntersectionPrecomputations) -> Color {
     lighting(
         &precomputed.scene_object.lock().unwrap().material(),
         &world.light_sources[0],
@@ -140,13 +140,13 @@ pub fn shade_hit(world: &World, precomputed: &IntersectionPrecomputations) -> Co
     )
 }
 
-pub fn color_at(world: &World, ray: Ray) -> Color {
-    let intersections = intersect_world(world, ray);
+pub fn color_at(world: Arc<World>, ray: Ray) -> Color {
+    let intersections = intersect_world(world.clone(), ray);
     match intersections.hit() {
         None => Color::new(0.0, 0.0, 0.0),
         Some(intersection) => {
             let precomputed = prepare_computations(intersection, ray);
-            shade_hit(&world, &precomputed)
+            shade_hit(world.clone(), &precomputed)
         }
     }
 }

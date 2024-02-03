@@ -3,6 +3,7 @@ use std::io::BufWriter;
 
 use crate::{colors::Color, utils::remove_suffix};
 
+#[derive(Debug)]
 pub struct Canvas {
     pub pixels: Vec<Vec<Color>>,
 }
