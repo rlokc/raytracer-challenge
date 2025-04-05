@@ -1,10 +1,10 @@
 use std::fmt::Debug;
 
-use crate::{utils::f32_eq, tuple::Tuple};
+use crate::{tuple::Tuple, utils::f32_eq};
 
 #[derive(Debug, Clone)]
 pub struct Matrix {
-    pub vals: Vec<Vec<f32>>
+    pub vals: Vec<Vec<f32>>,
 }
 
 // fn debug_print<T: Debug>(val: T) -> T {
@@ -25,7 +25,7 @@ impl PartialEq for Matrix {
 impl Matrix {
     pub fn new_from_string(vals: &str) -> Matrix {
         /*
-        Constructs a new map from a string input like: 
+        Constructs a new map from a string input like:
         let s = "
         | 1    | 2    | 3    | 4    |
         | 5.5  | 6.5  | 7.5  | 8.5  |
@@ -36,20 +36,18 @@ impl Matrix {
          */
 
         let values = vals
-        .replace('|', " ")
-        .split('\n')
-        .map(|line| line
-            .split_whitespace()
-            .filter(|s| s != &"" && s != &"|")
-            .map(|val| val.parse::<f32>().unwrap())
-            .collect::<Vec<f32>>()
-        )
-        .filter(|line| !line.is_empty())
-        .collect::<Vec<Vec<f32>>>();
-
+            .replace('|', " ")
+            .split('\n')
+            .map(|line| {
+                line.split_whitespace()
+                    .filter(|s| s != &"" && s != &"|")
+                    .map(|val| val.parse::<f32>().unwrap())
+                    .collect::<Vec<f32>>()
+            })
+            .filter(|line| !line.is_empty())
+            .collect::<Vec<Vec<f32>>>();
 
         Matrix { vals: values }
-
     }
 
     pub fn identity_matrix(dimensions: usize) -> Matrix {
@@ -61,12 +59,7 @@ impl Matrix {
     }
 
     pub fn new_from_tuple(tuple: &Tuple) -> Matrix {
-        let vals = vec![
-            vec![tuple.x],
-            vec![tuple.y],
-            vec![tuple.z],
-            vec![tuple.w],
-        ];
+        let vals = vec![vec![tuple.x], vec![tuple.y], vec![tuple.z], vec![tuple.w]];
         Matrix { vals }
     }
 
@@ -75,7 +68,12 @@ impl Matrix {
         assert_eq!(self.n_rows(), 4);
         assert_eq!(self.n_columns(), 1);
 
-        Tuple::new(self.get(0, 0), self.get(1, 0), self.get(2, 0), self.get(3, 0))
+        Tuple::new(
+            self.get(0, 0),
+            self.get(1, 0),
+            self.get(2, 0),
+            self.get(3, 0),
+        )
     }
 
     pub fn get(&self, i: usize, j: usize) -> f32 {
@@ -119,9 +117,7 @@ impl Matrix {
     }
 
     pub fn transpose(&self) -> Matrix {
-        let mut vals = vec![
-            vec![0.0; self.n_rows()]; self.n_columns()
-        ];
+        let mut vals = vec![vec![0.0; self.n_rows()]; self.n_columns()];
         for i in 0..self.n_rows() {
             for j in 0..self.n_columns() {
                 vals[j][i] = self.vals[i][j];
@@ -149,7 +145,7 @@ impl Matrix {
                 continue;
             };
             for j in 0..self.n_columns() {
-                if j == col_to_remove { 
+                if j == col_to_remove {
                     continue;
                 }
                 let res_i = if i > row_to_remove { i - 1 } else { i };
@@ -166,12 +162,16 @@ impl Matrix {
 
     pub fn cofactor(&self, row: usize, column: usize) -> f32 {
         let minor = self.minor(row, column);
-        if (row + column) % 2 == 0 { minor } else { -minor }
+        if (row + column) % 2 == 0 {
+            minor
+        } else {
+            -minor
+        }
     }
 
     pub fn invert(&self) -> Option<Matrix> {
         if f32_eq(self.determinant(), 0.0) {
-            return None
+            return None;
         }
 
         let det = self.determinant();
@@ -250,5 +250,4 @@ impl Matrix {
 
         self.mat_mul(&res)
     }
-
 }

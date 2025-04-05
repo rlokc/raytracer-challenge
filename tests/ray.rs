@@ -2,7 +2,13 @@
 mod ray_tests {
     use std::sync::Arc;
 
-    use raytracer::{tuple::Tuple, ray::Ray, sphere::sphere, intersection::{Intersection, Intersections, intersect}, matrix::Matrix};
+    use raytracer::{
+        intersection::{intersect, Intersection, Intersections},
+        matrix::Matrix,
+        ray::Ray,
+        sphere::sphere,
+        tuple::Tuple,
+    };
 
     #[test]
     fn ray_creation() {
@@ -76,7 +82,7 @@ mod ray_tests {
         let s = sphere();
 
         let res = ray.intersect(s.clone());
-        
+
         assert_eq!(res[0], Intersection::new(-6.0, s.clone()));
         assert_eq!(res[1], Intersection::new(-4.0, s.clone()));
     }
@@ -138,7 +144,6 @@ mod ray_tests {
         assert_eq!(i, i2);
     }
 
-
     #[test]
     fn intersections_hit_3() {
         let s = sphere();
@@ -163,7 +168,10 @@ mod ray_tests {
         let i4 = Arc::new(Intersection::new(2.0, s.clone()));
 
         let mut xs = Intersections::new();
-        xs.push(i1.clone()).push(i2.clone()).push(i3.clone()).push(i4.clone());
+        xs.push(i1.clone())
+            .push(i2.clone())
+            .push(i3.clone())
+            .push(i4.clone());
 
         let i = xs.hit().unwrap();
         assert_eq!(i, i4);
@@ -195,7 +203,11 @@ mod ray_tests {
     fn sphere_default() {
         let s = sphere();
 
-        assert!(s.lock().unwrap().transformation().equals(&Matrix::identity_matrix(4)));
+        assert!(s
+            .lock()
+            .unwrap()
+            .transformation()
+            .equals(&Matrix::identity_matrix(4)));
     }
 
     #[test]
@@ -220,13 +232,12 @@ mod ray_tests {
         expected.push(i1).push(i2);
 
         s.lock().unwrap().set_transformation(&t);
-        
+
         let actual = intersect(s, r);
         assert_eq!(actual.len(), expected.len());
         assert_eq!(actual[0].t, expected[0].t);
         assert_eq!(actual[1].t, expected[1].t);
     }
-
 
     #[test]
     fn translated_sphere_interset() {
@@ -236,9 +247,8 @@ mod ray_tests {
         let t = Matrix::identity_matrix(4).translate(5.0, 0.0, 0.0);
 
         s.lock().unwrap().set_transformation(&t);
-        
+
         let actual = intersect(s, r);
         assert_eq!(actual.len(), 0);
     }
-
 }

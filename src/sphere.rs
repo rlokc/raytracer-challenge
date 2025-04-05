@@ -1,10 +1,10 @@
 use std::sync::{Arc, Mutex};
 
-use crate::{scene_object::SceneObject, matrix::Matrix};
-use rand::Rng;
 use crate::material::Material;
 use crate::scene_object::MutSceneObject;
 use crate::tuple::Tuple;
+use crate::{matrix::Matrix, scene_object::SceneObject};
+use rand::Rng;
 
 #[derive(Debug, Clone)]
 pub struct Sphere {
@@ -29,7 +29,12 @@ impl SceneObject for Sphere {
     fn normal_at(&self, world_point: Tuple) -> Tuple {
         let object_point = self.transform.invert().unwrap().tuple_mul(&world_point);
         let object_normal = object_point.sub(Tuple::point(0.0, 0.0, 0.0));
-        let mut world_normal = self.transform.invert().unwrap().transpose().tuple_mul(&object_normal);
+        let mut world_normal = self
+            .transform
+            .invert()
+            .unwrap()
+            .transpose()
+            .tuple_mul(&object_normal);
         world_normal.w = 0.0;
         world_normal.normalize()
     }
@@ -49,7 +54,7 @@ impl Sphere {
         Sphere {
             material: Material::default(),
             id: rng.gen::<i32>(),
-            transform: Matrix::identity_matrix(4)
+            transform: Matrix::identity_matrix(4),
         }
     }
 }

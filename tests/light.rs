@@ -15,7 +15,6 @@ mod light_tests {
 
         assert_eq!(light.intensity, intensity);
         assert_eq!(light.position, position);
-
     }
 
     #[test]
@@ -54,7 +53,7 @@ mod light_tests {
     fn test_lighting_eye_between_light_and_surface_eye_offset_45() {
         let m = Material::default();
         let position = Tuple::point(0.0, 0.0, 0.0);
-        let sqrt = 2.0f32.sqrt()/2.0;
+        let sqrt = 2.0f32.sqrt() / 2.0;
         let eye = Tuple::vector(0.0, sqrt, -sqrt);
         let normal = Tuple::vector(0.0, 0.0, -1.0);
         let light = PointLight::new(Tuple::point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
@@ -81,7 +80,7 @@ mod light_tests {
 
     #[test]
     fn test_lighting_eye_on_reflection_vector() {
-        let sqrt = 2.0f32.sqrt()/2.0;
+        let sqrt = 2.0f32.sqrt() / 2.0;
         let m = Material::default();
         let position = Tuple::point(0.0, 0.0, 0.0);
         let eye = Tuple::vector(0.0, -sqrt, -sqrt);
@@ -107,5 +106,4 @@ mod light_tests {
 
         assert_eq!(expected, actual);
     }
-
 }

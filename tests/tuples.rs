@@ -78,7 +78,7 @@ mod tuple_tests {
             x: 1.0,
             y: 1.0,
             z: 6.0,
-            w: 1.0
+            w: 1.0,
         };
         let actual = a.add(b);
         assert_eq!(actual, expected);
@@ -113,8 +113,18 @@ mod tuple_tests {
 
     #[test]
     fn test_negation() {
-        let a = Tuple{x: 1.0, y: -2.0, z: 3.0, w: -4.0};
-        let expected = Tuple{x: -1.0, y: 2.0, z: -3.0, w: 4.0};
+        let a = Tuple {
+            x: 1.0,
+            y: -2.0,
+            z: 3.0,
+            w: -4.0,
+        };
+        let expected = Tuple {
+            x: -1.0,
+            y: 2.0,
+            z: -3.0,
+            w: 4.0,
+        };
         let actual = a.negate();
         assert_eq!(actual, expected);
     }
@@ -136,7 +146,7 @@ mod tuple_tests {
         let actual = a.scalar_mul(mul);
         assert_eq!(actual, expected);
     }
-        
+
     #[test]
     fn test_scalar_div() {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
@@ -161,7 +171,7 @@ mod tuple_tests {
 
         let v2 = Tuple::vector(1.0, 2.0, 3.0);
         let sq = 14.0_f32.sqrt();
-        let v2_normalized = Tuple::vector(1.0/sq, 2.0/sq, 3.0/sq);
+        let v2_normalized = Tuple::vector(1.0 / sq, 2.0 / sq, 3.0 / sq);
         assert_eq!(v2.normalize(), v2_normalized);
     }
 
@@ -189,5 +199,4 @@ mod tuple_tests {
         assert_eq!(a.cross(b), cross_ab);
         assert_eq!(b.cross(a), cross_ba);
     }
-
 }

@@ -1,6 +1,6 @@
-use std::{ops::Index, sync::Arc};
 use crate::colors::Color;
 use crate::light::lighting;
+use std::{ops::Index, sync::Arc};
 
 use crate::ray::Ray;
 use crate::scene_object::MutSceneObject;
@@ -17,7 +17,7 @@ pub struct Intersection {
 pub struct IntersectionPrecomputations {
     pub t: f32,
     pub scene_object: MutSceneObject,
-    pub point: Tuple, // in world space
+    pub point: Tuple,      // in world space
     pub eye_vector: Tuple, // pointing back towards the eye
     pub normal_vector: Tuple,
     pub is_inside_object: bool,
@@ -27,28 +27,25 @@ impl PartialEq for Intersection {
     fn eq(&self, other: &Self) -> bool {
         let id_a = self.scene_object.lock().unwrap().id();
         let id_b = other.scene_object.lock().unwrap().id();
-        return self.t == other.t && id_a == id_b
+        return self.t == other.t && id_a == id_b;
     }
 
     fn ne(&self, other: &Self) -> bool {
         let id_a = self.scene_object.lock().unwrap().id();
         let id_b = other.scene_object.lock().unwrap().id();
-        return self.t != other.t || id_a != id_b
+        return self.t != other.t || id_a != id_b;
     }
 }
 
 impl Intersection {
     pub fn new(t: f32, scene_object: MutSceneObject) -> Intersection {
-        Intersection {
-            t,
-            scene_object,
-        }
+        Intersection { t, scene_object }
     }
 }
 
 #[derive(Debug)]
 pub struct Intersections {
-    pub values: Vec<Arc<Intersection>>
+    pub values: Vec<Arc<Intersection>>,
 }
 
 impl Index<usize> for Intersections {
@@ -77,7 +74,8 @@ impl Intersections {
     }
 
     pub fn hit(&self) -> Option<Arc<Intersection>> {
-        self.values.iter()
+        self.values
+            .iter()
             .filter(|i| i.t > 0.0)
             // .min_by(|i1, i2| i1.t.partial_cmp(&i2.t).expect("Tried to compare to NaN"))
             .min_by(|i1, i2| i1.t.total_cmp(&i2.t))
@@ -107,7 +105,10 @@ pub fn intersect_world(world: Arc<World>, r: Ray) -> Intersections {
     res
 }
 
-pub fn prepare_computations(intersection: Arc<Intersection>, ray: Ray) -> IntersectionPrecomputations {
+pub fn prepare_computations(
+    intersection: Arc<Intersection>,
+    ray: Ray,
+) -> IntersectionPrecomputations {
     let point = ray.position(intersection.t);
 
     let eye_vector = ray.direction.negate();
@@ -120,7 +121,7 @@ pub fn prepare_computations(intersection: Arc<Intersection>, ray: Ray) -> Inters
         normal_vector = normal_vector.negate();
     }
 
-    IntersectionPrecomputations{
+    IntersectionPrecomputations {
         t: intersection.t,
         scene_object: intersection.scene_object.clone(),
         point,
@@ -136,7 +137,7 @@ pub fn shade_hit(world: Arc<World>, precomputed: &IntersectionPrecomputations) -
         &world.light_sources[0],
         precomputed.point,
         precomputed.eye_vector,
-        precomputed.normal_vector
+        precomputed.normal_vector,
     )
 }
 

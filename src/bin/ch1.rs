@@ -1,4 +1,7 @@
-use raytracer::{tuple::Tuple, bin_utils::{Projectile, Environment, tick}};
+use raytracer::{
+    bin_utils::{tick, Environment, Projectile},
+    tuple::Tuple,
+};
 
 pub fn main() {
     let mut p = Projectile {

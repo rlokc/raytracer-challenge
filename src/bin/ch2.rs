@@ -1,4 +1,9 @@
-use raytracer::{bin_utils::{Projectile, Environment, tick}, tuple::Tuple, colors::Color, canvas::Canvas};
+use raytracer::{
+    bin_utils::{tick, Environment, Projectile},
+    canvas::Canvas,
+    colors::Color,
+    tuple::Tuple,
+};
 
 fn draw_trajectory(canvas: &mut Canvas, projectile: &Projectile) {
     let trajectory_color = Color::new(0.8, 0.3, 0.3);
@@ -20,7 +25,6 @@ pub fn main() {
     };
 
     let mut n_ticks = 0;
-
 
     let mut canvas = Canvas::new(900, 550);
 

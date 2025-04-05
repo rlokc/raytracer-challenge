@@ -1,7 +1,6 @@
-
 #[cfg(test)]
 mod matrix_tests {
-    use raytracer::{matrix::Matrix, utils::f32_eq, tuple::Tuple};
+    use raytracer::{matrix::Matrix, tuple::Tuple, utils::f32_eq};
 
     #[test]
     pub fn matrix_creation() {
@@ -20,7 +19,6 @@ mod matrix_tests {
         assert!(f32_eq(m.get(2, 2), 11.0));
         assert!(f32_eq(m.get(3, 0), 13.5));
         assert!(f32_eq(m.get(3, 2), 15.5));
-
     }
 
     #[test]
@@ -51,7 +49,6 @@ mod matrix_tests {
 
     #[test]
     pub fn matrix_equality() {
-
         let s = "
         | 1 | 2 | 3 | 4 |
         | 5 | 6 | 7 | 8 |
@@ -347,10 +344,10 @@ mod matrix_tests {
 
         assert_eq!(m.determinant(), 532.0);
         assert_eq!(m.cofactor(2, 3), -160.0);
-        assert_eq!(actual.get(3, 2), -160.0/532.0);
+        assert_eq!(actual.get(3, 2), -160.0 / 532.0);
 
         assert_eq!(m.cofactor(3, 2), 105.0);
-        assert_eq!(actual.get(2, 3), 105.0/532.0);
+        assert_eq!(actual.get(2, 3), 105.0 / 532.0);
 
         assert_eq!(actual, expected);
     }

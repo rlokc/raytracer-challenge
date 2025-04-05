@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod canvas_tests {
-    use raytracer::{colors::Color, canvas::Canvas};
+    use raytracer::{canvas::Canvas, colors::Color};
 
     #[test]
     fn color_test() {
@@ -68,10 +68,10 @@ mod canvas_tests {
     #[test]
     fn canvas_test_write() {
         let mut canvas = Canvas::new(10, 20);
-        let red =  Color::new(1.0, 0.0, 0.0);
+        let red = Color::new(1.0, 0.0, 0.0);
 
         canvas.write_pixel(2, 3, red);
-        
+
         let actual = canvas.pixel_at(2, 3);
         assert!(actual.equals(red));
     }
@@ -99,7 +99,6 @@ mod canvas_tests {
         canvas.write_pixel(0, 0, c1);
         canvas.write_pixel(2, 1, c2);
         canvas.write_pixel(4, 2, c3);
-
 
         canvas.to_ppm();
     }

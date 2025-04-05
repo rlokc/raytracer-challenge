@@ -2,8 +2,8 @@
 mod transformation_tests {
     use std::f32::consts::PI;
 
-    use raytracer::{matrix::Matrix, tuple::Tuple};
     use raytracer::transformations::{scale, translate, view_transform};
+    use raytracer::{matrix::Matrix, tuple::Tuple};
 
     #[test]
     pub fn translation_test() {
@@ -58,7 +58,10 @@ mod transformation_tests {
 
     #[test]
     pub fn scaling_inverse() {
-        let transform = Matrix::identity_matrix(4).scale(2.0, 3.0, 4.0).invert().unwrap();
+        let transform = Matrix::identity_matrix(4)
+            .scale(2.0, 3.0, 4.0)
+            .invert()
+            .unwrap();
         let v = Tuple::vector(-4.0, 6.0, 8.0);
 
         let expected = Tuple::vector(-2.0, 2.0, 2.0);
@@ -202,8 +205,8 @@ mod transformation_tests {
         let p5 = t.tuple_mul(&p);
         assert_eq!(p4, p5);
 
-
-        let t_var2 = Matrix::identity_matrix(4).rotate_x(PI / 2.0)
+        let t_var2 = Matrix::identity_matrix(4)
+            .rotate_x(PI / 2.0)
             .scale(5.0, 5.0, 5.0)
             .translate(10.0, 5.0, 7.0);
         assert_eq!(t_var2.tuple_mul(&p), p4);
@@ -252,12 +255,14 @@ mod transformation_tests {
         let up = Tuple::vector(1.0, 1.0, 0.0);
 
         let actual = view_transform(from, to, up);
-        let expected = Matrix::new_from_string("
+        let expected = Matrix::new_from_string(
+            "
 | -0.50709 | 0.50709 | 0.67612 | -2.36643 |
 | 0.76772 | 0.60609 | 0.12122 | -2.82843 |
 | -0.35857 | 0.59761 | -0.71714 | 0.00000 |
 | 0.00000 | 0.00000 | 0.00000 | 1.00000 |
-        ");
+        ",
+        );
 
         assert_eq!(actual, expected);
     }

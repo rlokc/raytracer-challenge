@@ -1,13 +1,15 @@
 #[cfg(test)]
 mod world_tests {
-    use std::sync::Arc;
     use raytracer::colors::Color;
-    use raytracer::intersection::{color_at, intersect_world, Intersection, prepare_computations, shade_hit};
+    use raytracer::intersection::{
+        color_at, intersect_world, prepare_computations, shade_hit, Intersection,
+    };
     use raytracer::light::PointLight;
     use raytracer::ray::Ray;
     use raytracer::sphere::sphere;
     use raytracer::tuple::Tuple;
     use raytracer::world::World;
+    use std::sync::Arc;
 
     #[test]
     fn test_new_world() {
@@ -94,7 +96,8 @@ mod world_tests {
     #[test]
     fn test_intersection_shading_inside() {
         let mut w = World::default_world();
-        w.light_sources[0] = PointLight::new(Tuple::point(0.0, 0.25, 0.0), Color::new(1.0, 1.0, 1.0));
+        w.light_sources[0] =
+            PointLight::new(Tuple::point(0.0, 0.25, 0.0), Color::new(1.0, 1.0, 1.0));
         let ray = Ray::new(Tuple::point(0.0, 0.0, 0.0), Tuple::vector(0.0, 0.0, 1.0));
         let shape = w.objects[1].clone();
         let i = Arc::new(Intersection::new(0.5, shape.clone()));

@@ -5,7 +5,6 @@ pub fn translate(x: f32, y: f32, z: f32) -> Matrix {
     Matrix::identity_matrix(4).translate(x, y, z)
 }
 
-
 pub fn scale(x: f32, y: f32, z: f32) -> Matrix {
     Matrix::identity_matrix(4).scale(x, y, z)
 }

@@ -11,11 +11,11 @@ pub struct Material {
 
 impl PartialEq for Material {
     fn eq(&self, other: &Self) -> bool {
-        return self.color == other.color &&
-            self.ambient == other.ambient &&
-            self.diffuse == other.diffuse &&
-            self.specular == other.specular &&
-            self.shininess == other.shininess;
+        return self.color == other.color
+            && self.ambient == other.ambient
+            && self.diffuse == other.diffuse
+            && self.specular == other.specular
+            && self.shininess == other.shininess;
     }
 }
 
@@ -26,10 +26,22 @@ impl Material {
         let default_diffuse = 0.9;
         let default_specular = 0.9;
         let default_shininess = 200.0;
-        Material::new(color, default_ambient, default_diffuse, default_specular, default_shininess)
+        Material::new(
+            color,
+            default_ambient,
+            default_diffuse,
+            default_specular,
+            default_shininess,
+        )
     }
 
-    pub fn new(color: Color, ambient: f32, diffuse: f32, specular: f32, shininess: f32) -> Material {
+    pub fn new(
+        color: Color,
+        ambient: f32,
+        diffuse: f32,
+        specular: f32,
+        shininess: f32,
+    ) -> Material {
         Material {
             color,
             ambient,

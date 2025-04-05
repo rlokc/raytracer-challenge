@@ -4,7 +4,7 @@ use raytracer::intersection::intersect;
 use raytracer::light::{lighting, PointLight};
 use raytracer::material::Material;
 use raytracer::ray::Ray;
-use raytracer::sphere::{sphere};
+use raytracer::sphere::sphere;
 use raytracer::tuple::Tuple;
 
 pub fn main() {
@@ -57,7 +57,7 @@ pub fn main() {
                     let color = lighting(&material, &light, point, eye, normal);
 
                     canvas.write_pixel(x, y, color);
-                },
+                }
             }
         }
     }

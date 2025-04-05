@@ -1,5 +1,5 @@
-use std::{fs::File, io::Write};
 use std::io::BufWriter;
+use std::{fs::File, io::Write};
 
 use crate::{colors::Color, utils::remove_suffix};
 
@@ -19,7 +19,7 @@ impl Canvas {
             }
             pixels.push(row);
         }
-        Canvas {pixels}
+        Canvas { pixels }
     }
 
     pub fn width(&self) -> usize {
@@ -37,7 +37,7 @@ impl Canvas {
             return None;
         }
         if !(0..self.width()).contains(&x) {
-            return None
+            return None;
         }
         let y: usize = y.try_into().unwrap();
         let x: usize = x.try_into().unwrap();
@@ -52,14 +52,16 @@ impl Canvas {
     }
 
     pub fn to_ppm(&self) -> String {
-        let max_value = 255; 
+        let max_value = 255;
         let mut res = String::new();
         res.push_str("P3\n");
         res.push_str(&format!("{} {}\n", self.width(), self.height()));
         res.push_str(&format!("{}\n", max_value));
 
         for row in self.pixels.iter() {
-            let row_text = row.iter().fold("".to_string(), |acc, pixel| format!("{acc} {}", pixel.to_ppm(max_value)));
+            let row_text = row.iter().fold("".to_string(), |acc, pixel| {
+                format!("{acc} {}", pixel.to_ppm(max_value))
+            });
             // Wrap every 70 symbols
             let mut final_row_text = "".to_string();
             let mut line_len = 0;

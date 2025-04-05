@@ -1,9 +1,11 @@
-
 use std::sync::Arc;
 
-use crate::{tuple::Tuple, intersection::{Intersections, Intersection}, matrix::Matrix};
 use crate::scene_object::MutSceneObject;
-
+use crate::{
+    intersection::{Intersection, Intersections},
+    matrix::Matrix,
+    tuple::Tuple,
+};
 
 #[derive(Copy, Debug, Clone)]
 pub struct Ray {
@@ -29,8 +31,7 @@ impl Ray {
     }
 
     pub fn intersect(&self, scene_object: MutSceneObject) -> Intersections {
-
-        let mut res  = Intersections::new();
+        let mut res = Intersections::new();
 
         let sphere_to_ray = self.origin.sub(Tuple::point(0.0, 0.0, 0.0));
 
@@ -44,10 +45,9 @@ impl Ray {
             return res;
         }
 
-
         let t1 = (-b - discriminant.sqrt()) / (2.0 * a);
         let t2 = (-b + discriminant.sqrt()) / (2.0 * a);
-        
+
         res.push(Arc::new(Intersection::new(t1, scene_object.clone())));
         res.push(Arc::new(Intersection::new(t2, scene_object.clone())));
         return res;

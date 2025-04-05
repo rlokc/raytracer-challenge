@@ -1,18 +1,18 @@
 #[cfg(test)]
 mod render_tests {
-    use std::f32::consts::PI;
-    use std::sync::Arc;
     use raytracer::camera::Camera;
     use raytracer::colors::Color;
     use raytracer::render::render;
     use raytracer::transformations::view_transform;
     use raytracer::tuple::Tuple;
     use raytracer::world::World;
+    use std::f32::consts::PI;
+    use std::sync::Arc;
 
     #[test]
     fn test_default_render() {
         let w = World::default_world();
-        let mut c = Camera::new(11, 11, PI/2.0);
+        let mut c = Camera::new(11, 11, PI / 2.0);
         let from = Tuple::point(0.0, 0.0, -5.0);
         let to = Tuple::point(0.0, 0.0, 0.0);
         let up = Tuple::vector(0.0, 1.0, 0.0);

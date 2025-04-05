@@ -5,7 +5,6 @@ use raytracer::{canvas::Canvas, colors::Color, matrix::Matrix, tuple::Tuple};
 const CANVAS_SIZE: usize = 400;
 
 pub fn main() {
-
     let mut canvas = Canvas::new(CANVAS_SIZE, CANVAS_SIZE);
 
     let white = Color::new(1.0, 1.0, 1.0);

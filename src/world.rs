@@ -1,7 +1,7 @@
 use crate::colors::Color;
 use crate::light::PointLight;
 use crate::material::Material;
-use crate::scene_object::{MutSceneObject};
+use crate::scene_object::MutSceneObject;
 use crate::sphere::sphere;
 use crate::transformations::scale;
 use crate::tuple::Tuple;
@@ -33,7 +33,10 @@ impl World {
 
         let sphere2 = sphere();
         let sphere2transform = scale(0.5, 0.5, 0.5);
-        sphere2.lock().unwrap().set_transformation(&sphere2transform);
+        sphere2
+            .lock()
+            .unwrap()
+            .set_transformation(&sphere2transform);
 
         World {
             objects: vec![sphere1, sphere2],
