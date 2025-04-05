@@ -96,14 +96,16 @@ impl Canvas {
         let mut stream_writer = writer.stream_writer().unwrap();
         for row in self.pixels.iter() {
             for pixel in row.iter() {
-                stream_writer.write(&pixel.to_rgb()).unwrap();
+                stream_writer.write_all(&pixel.to_rgb()).unwrap();
             }
         }
+        println!("Writing PNG to {}", path);
         stream_writer.finish().unwrap();
     }
 
     pub fn to_ppm_file(&self, path: &str) -> std::io::Result<()> {
         let mut file = File::create(path)?;
+        println!("Writing PPM to {}", path);
         file.write_all(self.to_ppm().as_bytes())
     }
 }
