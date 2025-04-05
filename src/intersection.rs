@@ -5,19 +5,21 @@ use std::{ops::Index, sync::Arc};
 use crate::ray::Ray;
 use crate::scene_object::MutSceneObject;
 use crate::tuple::Tuple;
+use crate::utils::EPSILON;
 use crate::world::World;
 
 #[derive(Debug)]
 pub struct Intersection {
-    pub t: f32,
+    pub t: f64,
     pub scene_object: MutSceneObject,
 }
 
 #[derive(Debug)]
 pub struct IntersectionPrecomputations {
-    pub t: f32,
+    pub t: f64,
     pub scene_object: MutSceneObject,
     pub point: Tuple,      // in world space
+    pub over_point: Tuple, // To adjust for floating point precision loss when calculating shadows
     pub eye_vector: Tuple, // pointing back towards the eye
     pub normal_vector: Tuple,
     pub is_inside_object: bool,
@@ -38,7 +40,7 @@ impl PartialEq for Intersection {
 }
 
 impl Intersection {
-    pub fn new(t: f32, scene_object: MutSceneObject) -> Intersection {
+    pub fn new(t: f64, scene_object: MutSceneObject) -> Intersection {
         Intersection { t, scene_object }
     }
 }
@@ -121,6 +123,8 @@ pub fn prepare_computations(
         normal_vector = normal_vector.negate();
     }
 
+    let over_point = point.add(normal_vector.scalar_mul(EPSILON));
+
     IntersectionPrecomputations {
         t: intersection.t,
         scene_object: intersection.scene_object.clone(),
@@ -128,16 +132,20 @@ pub fn prepare_computations(
         eye_vector,
         normal_vector,
         is_inside_object,
+        over_point,
     }
 }
 
 pub fn shade_hit(world: Arc<World>, precomputed: &IntersectionPrecomputations) -> Color {
+    let shadowed = is_shadowed(world.clone(), precomputed.over_point);
+
     lighting(
         &precomputed.scene_object.lock().unwrap().material(),
         &world.light_sources[0],
         precomputed.point,
         precomputed.eye_vector,
         precomputed.normal_vector,
+        shadowed,
     )
 }
 
@@ -149,5 +157,19 @@ pub fn color_at(world: Arc<World>, ray: Ray) -> Color {
             let precomputed = prepare_computations(intersection, ray);
             shade_hit(world.clone(), &precomputed)
         }
+    }
+}
+
+pub fn is_shadowed(world: Arc<World>, point: Tuple) -> bool {
+    let v = world.light_sources[0].position.sub(point);
+    let distance = v.magnitude();
+    let direction = v.normalize();
+
+    let r = Ray::new(point, direction);
+    let intersections = intersect_world(world.clone(), r);
+
+    match intersections.hit() {
+        None => false,
+        Some(intersection) => intersection.t < distance,
     }
 }

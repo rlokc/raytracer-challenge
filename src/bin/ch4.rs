@@ -1,4 +1,4 @@
-use std::f32::consts::PI;
+use std::f64::consts::PI;
 
 use raytracer::{canvas::Canvas, colors::Color, matrix::Matrix, tuple::Tuple};
 
@@ -13,7 +13,7 @@ pub fn main() {
         let p = Tuple::point(0.0, 0.0, 0.0);
         let transform = Matrix::identity_matrix(4)
             .translate(150.0, 0.0, 0.0)
-            .rotate_z(-i as f32 * PI / 6.0)
+            .rotate_z(-i as f64 * PI / 6.0)
             .translate(200.0, 200.0, 0.0);
 
         let point = transform.tuple_mul(&p);

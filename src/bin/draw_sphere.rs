@@ -10,10 +10,10 @@ use raytracer::tuple::Tuple;
 pub fn main() {
     let ray_origin = Tuple::point(0.0, 0.0, -5.0);
     let wall_z = 10.0;
-    let wall_size = 7.0f32;
+    let wall_size = 7.0f64;
 
     let canvas_pixels = 250;
-    let pixel_size = wall_size / canvas_pixels as f32;
+    let pixel_size = wall_size / canvas_pixels as f64;
 
     let half = wall_size / 2.0;
 
@@ -37,9 +37,9 @@ pub fn main() {
 
     println!("Drawing");
     for y in 0..canvas_pixels {
-        let world_y = half - pixel_size * y as f32;
+        let world_y = half - pixel_size * y as f64;
         for x in 0..canvas_pixels {
-            let world_x = -half + pixel_size * x as f32;
+            let world_x = -half + pixel_size * x as f64;
 
             let position = Tuple::point(world_x, world_y, wall_z);
             let ray = Ray::new(ray_origin, position.sub(ray_origin).normalize());
@@ -54,7 +54,7 @@ pub fn main() {
 
                     let material = hit.scene_object.lock().unwrap().material();
 
-                    let color = lighting(&material, &light, point, eye, normal);
+                    let color = lighting(&material, &light, point, eye, normal, false);
 
                     canvas.write_pixel(x, y, color);
                 }

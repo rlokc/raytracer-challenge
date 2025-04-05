@@ -23,6 +23,7 @@ pub fn lighting(
     position: Tuple,
     eye_vector: Tuple,
     normal_vector: Tuple,
+    in_shadow: bool,
 ) -> Color {
     // Combine surface color with light's color/intensity
     let effective_color = material.color.mul(light.intensity);
@@ -32,6 +33,10 @@ pub fn lighting(
 
     // Ambient contribution
     let ambient = effective_color.scalar_mul(material.ambient);
+
+    if in_shadow {
+        return ambient;
+    }
 
     // light_dot_normal represents the cosine of the angle between the light vector and the normal
     // vector. A negative number means the light is on the other side of the surface.

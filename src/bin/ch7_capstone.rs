@@ -7,7 +7,7 @@ use raytracer::sphere::sphere;
 use raytracer::transformations::{scale, translate, view_transform};
 use raytracer::tuple::Tuple;
 use raytracer::world::World;
-use std::f32::consts::PI;
+use std::f64::consts::PI;
 use std::sync::Arc;
 
 fn generate_world() -> World {

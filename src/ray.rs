@@ -19,14 +19,14 @@ impl Ray {
         Ray { origin, direction }
     }
 
-    pub fn new_flat(xo: f32, yo: f32, zo: f32, xd: f32, yd: f32, zd: f32) -> Ray {
+    pub fn new_flat(xo: f64, yo: f64, zo: f64, xd: f64, yd: f64, zd: f64) -> Ray {
         Ray {
             origin: Tuple::point(xo, yo, zo),
             direction: Tuple::vector(xd, yd, zd),
         }
     }
 
-    pub fn position(&self, time: f32) -> Tuple {
+    pub fn position(&self, time: f64) -> Tuple {
         self.origin.add(self.direction.scalar_mul(time))
     }
 

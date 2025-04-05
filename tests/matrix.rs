@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod matrix_tests {
-    use raytracer::{matrix::Matrix, tuple::Tuple, utils::f32_eq};
+    use raytracer::{matrix::Matrix, tuple::Tuple, utils::f64_eq};
 
     #[test]
     pub fn matrix_creation() {
@@ -12,13 +12,13 @@ mod matrix_tests {
         ";
         let m = Matrix::new_from_string(s);
 
-        assert!(f32_eq(m.get(0, 0), 1.0));
-        assert!(f32_eq(m.get(0, 3), 4.0));
-        assert!(f32_eq(m.get(1, 0), 5.5));
-        assert!(f32_eq(m.get(1, 2), 7.5));
-        assert!(f32_eq(m.get(2, 2), 11.0));
-        assert!(f32_eq(m.get(3, 0), 13.5));
-        assert!(f32_eq(m.get(3, 2), 15.5));
+        assert!(f64_eq(m.get(0, 0), 1.0));
+        assert!(f64_eq(m.get(0, 3), 4.0));
+        assert!(f64_eq(m.get(1, 0), 5.5));
+        assert!(f64_eq(m.get(1, 2), 7.5));
+        assert!(f64_eq(m.get(2, 2), 11.0));
+        assert!(f64_eq(m.get(3, 0), 13.5));
+        assert!(f64_eq(m.get(3, 2), 15.5));
     }
 
     #[test]
@@ -28,10 +28,10 @@ mod matrix_tests {
 
         let m = Matrix::new_from_string(s);
 
-        assert!(f32_eq(m.get(0, 0), -3.0));
-        assert!(f32_eq(m.get(0, 1), 5.0));
-        assert!(f32_eq(m.get(1, 0), 1.0));
-        assert!(f32_eq(m.get(1, 1), -2.0));
+        assert!(f64_eq(m.get(0, 0), -3.0));
+        assert!(f64_eq(m.get(0, 1), 5.0));
+        assert!(f64_eq(m.get(1, 0), 1.0));
+        assert!(f64_eq(m.get(1, 1), -2.0));
     }
 
     #[test]
@@ -42,9 +42,9 @@ mod matrix_tests {
 
         let m = Matrix::new_from_string(s);
 
-        assert!(f32_eq(m.get(0, 0), -3.0));
-        assert!(f32_eq(m.get(1, 1), -2.0));
-        assert!(f32_eq(m.get(2, 2), 1.0));
+        assert!(f64_eq(m.get(0, 0), -3.0));
+        assert!(f64_eq(m.get(1, 1), -2.0));
+        assert!(f64_eq(m.get(2, 2), 1.0));
     }
 
     #[test]
@@ -185,7 +185,7 @@ mod matrix_tests {
 
         let m = Matrix::new_from_string(s);
         let actual = m.determinant();
-        assert!(f32_eq(actual, 17.0));
+        assert!(f64_eq(actual, 17.0));
     }
 
     #[test]

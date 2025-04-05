@@ -12,20 +12,20 @@ impl PartialEq for Color {
 }
 
 impl Color {
-    pub fn new(red: f32, green: f32, blue: f32) -> Color {
+    pub fn new(red: f64, green: f64, blue: f64) -> Color {
         let t = Tuple::point(red, green, blue);
         Color { color_tuple: t }
     }
 
-    pub fn red(&self) -> f32 {
+    pub fn red(&self) -> f64 {
         self.color_tuple.x
     }
 
-    pub fn green(&self) -> f32 {
+    pub fn green(&self) -> f64 {
         self.color_tuple.y
     }
 
-    pub fn blue(&self) -> f32 {
+    pub fn blue(&self) -> f64 {
         self.color_tuple.z
     }
 
@@ -47,7 +47,7 @@ impl Color {
         c.reset_point()
     }
 
-    pub fn scalar_mul(&self, a: f32) -> Color {
+    pub fn scalar_mul(&self, a: f64) -> Color {
         let c = Color {
             color_tuple: self.color_tuple.scalar_mul(a),
         };
@@ -68,7 +68,7 @@ impl Color {
     }
 
     pub fn to_ppm(&self, max_value: i32) -> String {
-        let max_value = max_value as f32;
+        let max_value = max_value as f64;
         let red = (max_value * self.red().clamp(0.0, 1.0)).round() as i32;
         let green = (max_value * self.green().clamp(0.0, 1.0)).round() as i32;
         let blue = (max_value * self.blue().clamp(0.0, 1.0)).round() as i32;
@@ -76,7 +76,7 @@ impl Color {
     }
 
     pub fn to_rgb(&self) -> [u8; 3] {
-        let max_value = 255f32;
+        let max_value = 255f64;
         let red = (max_value * self.red().clamp(0.0, 1.0)).round() as u8;
         let green = (max_value * self.green().clamp(0.0, 1.0)).round() as u8;
         let blue = (max_value * self.blue().clamp(0.0, 1.0)).round() as u8;

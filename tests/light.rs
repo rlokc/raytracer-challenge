@@ -44,7 +44,7 @@ mod light_tests {
         let light = PointLight::new(Tuple::point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
 
         let expected = Color::new(1.9, 1.9, 1.9);
-        let actual = lighting(&m, &light, position, eye, normal);
+        let actual = lighting(&m, &light, position, eye, normal, false);
 
         assert_eq!(expected, actual);
     }
@@ -53,13 +53,13 @@ mod light_tests {
     fn test_lighting_eye_between_light_and_surface_eye_offset_45() {
         let m = Material::default();
         let position = Tuple::point(0.0, 0.0, 0.0);
-        let sqrt = 2.0f32.sqrt() / 2.0;
+        let sqrt = 2.0f64.sqrt() / 2.0;
         let eye = Tuple::vector(0.0, sqrt, -sqrt);
         let normal = Tuple::vector(0.0, 0.0, -1.0);
         let light = PointLight::new(Tuple::point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
 
         let expected = Color::new(1.0, 1.0, 1.0);
-        let actual = lighting(&m, &light, position, eye, normal);
+        let actual = lighting(&m, &light, position, eye, normal, false);
 
         assert_eq!(expected, actual);
     }
@@ -73,14 +73,14 @@ mod light_tests {
         let light = PointLight::new(Tuple::point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
 
         let expected = Color::new(0.7364, 0.7364, 0.7364);
-        let actual = lighting(&m, &light, position, eye, normal);
+        let actual = lighting(&m, &light, position, eye, normal, false);
 
         assert_eq!(expected, actual);
     }
 
     #[test]
     fn test_lighting_eye_on_reflection_vector() {
-        let sqrt = 2.0f32.sqrt() / 2.0;
+        let sqrt = 2.0f64.sqrt() / 2.0;
         let m = Material::default();
         let position = Tuple::point(0.0, 0.0, 0.0);
         let eye = Tuple::vector(0.0, -sqrt, -sqrt);
@@ -88,7 +88,7 @@ mod light_tests {
         let light = PointLight::new(Tuple::point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
 
         let expected = Color::new(1.6364, 1.6364, 1.6364);
-        let actual = lighting(&m, &light, position, eye, normal);
+        let actual = lighting(&m, &light, position, eye, normal, false);
 
         assert_eq!(expected, actual);
     }
@@ -102,7 +102,22 @@ mod light_tests {
         let light = PointLight::new(Tuple::point(0.0, 0.0, 10.0), Color::new(1.0, 1.0, 1.0));
 
         let expected = Color::new(0.1, 0.1, 0.1);
-        let actual = lighting(&m, &light, position, eye, normal);
+        let actual = lighting(&m, &light, position, eye, normal, false);
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn test_lighting_with_surface_in_shadow() {
+        let eye = Tuple::vector(0.0, 0.0, -1.0);
+        let normal = Tuple::vector(0.0, 0.0, -1.0);
+        let light = PointLight::new(Tuple::point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
+        let in_shadow = true;
+        let m = Material::default();
+        let position = Tuple::point(0.0, 0.0, 0.0);
+
+        let expected = Color::new(0.1, 0.1, 0.1);
+        let actual = lighting(&m, &light, position, eye, normal, true);
 
         assert_eq!(expected, actual);
     }

@@ -3,7 +3,7 @@ use raytracer::render::render;
 use raytracer::transformations::view_transform;
 use raytracer::tuple::Tuple;
 use raytracer::world::World;
-use std::f32::consts::PI;
+use std::f64::consts::PI;
 use std::sync::Arc;
 
 pub fn main() {

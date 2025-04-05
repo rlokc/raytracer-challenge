@@ -3,10 +3,10 @@ use crate::colors::Color;
 #[derive(Debug, Clone, Copy)]
 pub struct Material {
     pub color: Color,
-    pub ambient: f32,
-    pub diffuse: f32,
-    pub specular: f32,
-    pub shininess: f32,
+    pub ambient: f64,
+    pub diffuse: f64,
+    pub specular: f64,
+    pub shininess: f64,
 }
 
 impl PartialEq for Material {
@@ -37,10 +37,10 @@ impl Material {
 
     pub fn new(
         color: Color,
-        ambient: f32,
-        diffuse: f32,
-        specular: f32,
-        shininess: f32,
+        ambient: f64,
+        diffuse: f64,
+        specular: f64,
+        shininess: f64,
     ) -> Material {
         Material {
             color,

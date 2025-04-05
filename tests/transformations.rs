@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod transformation_tests {
-    use std::f32::consts::PI;
+    use std::f64::consts::PI;
 
     use raytracer::transformations::{scale, translate, view_transform};
     use raytracer::{matrix::Matrix, tuple::Tuple};
@@ -86,7 +86,7 @@ mod transformation_tests {
         let half_quarter = Matrix::identity_matrix(4).rotate_x(PI / 4.0);
         let full_quarter = Matrix::identity_matrix(4).rotate_x(PI / 2.0);
 
-        let expected_half = Tuple::point(0.0, 2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0);
+        let expected_half = Tuple::point(0.0, 2.0_f64.sqrt() / 2.0, 2.0_f64.sqrt() / 2.0);
         let expected_full = Tuple::point(0.0, 0.0, 1.0);
 
         assert_eq!(half_quarter.tuple_mul(&p), expected_half);
@@ -99,7 +99,7 @@ mod transformation_tests {
         let half_quarter = Matrix::identity_matrix(4).rotate_x(PI / 4.0);
         let inv = half_quarter.invert().unwrap();
 
-        let expected = Tuple::point(0.0, 2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
+        let expected = Tuple::point(0.0, 2.0_f64.sqrt() / 2.0, -2.0_f64.sqrt() / 2.0);
         assert_eq!(inv.tuple_mul(&p), expected);
     }
 
@@ -110,7 +110,7 @@ mod transformation_tests {
         let half_quarter = Matrix::identity_matrix(4).rotate_y(PI / 4.0);
         let full_quarter = Matrix::identity_matrix(4).rotate_y(PI / 2.0);
 
-        let expected_half = Tuple::point(2.0_f32.sqrt() / 2.0, 0.0, 2.0_f32.sqrt() / 2.0);
+        let expected_half = Tuple::point(2.0_f64.sqrt() / 2.0, 0.0, 2.0_f64.sqrt() / 2.0);
         let expected_full = Tuple::point(1.0, 0.0, 0.0);
 
         assert_eq!(half_quarter.tuple_mul(&p), expected_half);
@@ -124,7 +124,7 @@ mod transformation_tests {
         let half_quarter = Matrix::identity_matrix(4).rotate_z(PI / 4.0);
         let full_quarter = Matrix::identity_matrix(4).rotate_z(PI / 2.0);
 
-        let expected_half = Tuple::point(-2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
+        let expected_half = Tuple::point(-2.0_f64.sqrt() / 2.0, 2.0_f64.sqrt() / 2.0, 0.0);
         let expected_full = Tuple::point(-1.0, 0.0, 0.0);
 
         assert_eq!(half_quarter.tuple_mul(&p), expected_half);

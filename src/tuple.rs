@@ -1,11 +1,11 @@
-use crate::utils::f32_eq;
+use crate::utils::f64_eq;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Tuple {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-    pub w: f32,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
+    pub w: f64,
 }
 
 impl PartialEq for Tuple {
@@ -19,23 +19,23 @@ impl PartialEq for Tuple {
 }
 
 impl Tuple {
-    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Tuple {
+    pub fn new(x: f64, y: f64, z: f64, w: f64) -> Tuple {
         Tuple { x, y, z, w }
     }
 
-    pub fn point(x: f32, y: f32, z: f32) -> Tuple {
+    pub fn point(x: f64, y: f64, z: f64) -> Tuple {
         Tuple { x, y, z, w: 1.0 }
     }
 
-    pub fn vector(x: f32, y: f32, z: f32) -> Tuple {
+    pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
         Tuple { x, y, z, w: 0.0 }
     }
 
     pub fn equals(&self, other: &Tuple) -> bool {
-        f32_eq(self.x, other.x)
-            && f32_eq(self.y, other.y)
-            && f32_eq(self.z, other.z)
-            && f32_eq(self.w, other.w)
+        f64_eq(self.x, other.x)
+            && f64_eq(self.y, other.y)
+            && f64_eq(self.z, other.z)
+            && f64_eq(self.w, other.w)
     }
 
     pub fn add(&self, other: Tuple) -> Tuple {
@@ -65,7 +65,7 @@ impl Tuple {
         }
     }
 
-    pub fn scalar_mul(&self, a: f32) -> Tuple {
+    pub fn scalar_mul(&self, a: f64) -> Tuple {
         Tuple {
             x: self.x * a,
             y: self.y * a,
@@ -74,7 +74,7 @@ impl Tuple {
         }
     }
 
-    pub fn scalar_div(&self, a: f32) -> Tuple {
+    pub fn scalar_div(&self, a: f64) -> Tuple {
         Tuple {
             x: self.x / a,
             y: self.y / a,
@@ -83,7 +83,7 @@ impl Tuple {
         }
     }
 
-    pub fn magnitude(&self) -> f32 {
+    pub fn magnitude(&self) -> f64 {
         (self.x.powi(2) + self.y.powi(2) + self.z.powi(2) + self.w.powi(2)).sqrt()
     }
 
@@ -97,7 +97,7 @@ impl Tuple {
         }
     }
 
-    pub fn dot(&self, other: Tuple) -> f32 {
+    pub fn dot(&self, other: Tuple) -> f64 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 

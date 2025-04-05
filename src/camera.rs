@@ -5,18 +5,18 @@ use crate::tuple::Tuple;
 pub struct Camera {
     pub hsize: usize,
     pub vsize: usize,
-    pub fov: f32,
+    pub fov: f64,
     pub transform: Matrix,
 
-    half_width: f32,
-    half_height: f32,
-    pub pixel_size: f32,
+    half_width: f64,
+    half_height: f64,
+    pub pixel_size: f64,
 }
 
 impl Camera {
-    pub fn new(hsize: usize, vsize: usize, fov: f32) -> Camera {
+    pub fn new(hsize: usize, vsize: usize, fov: f64) -> Camera {
         let half_view = (fov / 2.0).tan();
-        let aspect = hsize as f32 / vsize as f32;
+        let aspect = hsize as f64 / vsize as f64;
 
         let half_width;
         let half_height;
@@ -29,7 +29,7 @@ impl Camera {
             half_height = half_view;
         }
 
-        let pixel_size = half_width * 2.0 / hsize as f32;
+        let pixel_size = half_width * 2.0 / hsize as f64;
 
         Camera {
             hsize,
@@ -44,8 +44,8 @@ impl Camera {
 
     pub fn ray_for_pixel(&self, x: usize, y: usize) -> Ray {
         // Offset from the edge of the canvas to the pixel's center
-        let xoffset = (x as f32 + 0.5) * self.pixel_size;
-        let yoffset = (y as f32 + 0.5) * self.pixel_size;
+        let xoffset = (x as f64 + 0.5) * self.pixel_size;
+        let yoffset = (y as f64 + 0.5) * self.pixel_size;
 
         // Untransformed coords of the pixel in world space (+x is to the left because camera looks towards -z)
         let world_x = self.half_width - xoffset;

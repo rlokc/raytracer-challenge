@@ -4,7 +4,8 @@ mod camera_tests {
     use raytracer::matrix::Matrix;
     use raytracer::transformations::translate;
     use raytracer::tuple::Tuple;
-    use std::f32::consts::PI;
+    use std::f64::consts::PI;
+    use raytracer::utils::f64_eq;
 
     #[test]
     pub fn default_camera() {
@@ -23,13 +24,13 @@ mod camera_tests {
     #[test]
     pub fn pixel_size_horizontal() {
         let c = Camera::new(200, 125, PI / 2.0);
-        assert_eq!(c.pixel_size, 0.01);
+        assert!(f64_eq(c.pixel_size, 0.01));
     }
 
     #[test]
     pub fn pixel_size_vertical() {
         let c = Camera::new(125, 200, PI / 2.0);
-        assert_eq!(c.pixel_size, 0.01);
+        assert!(f64_eq(c.pixel_size, 0.01));
     }
 
     #[test]
@@ -58,7 +59,7 @@ mod camera_tests {
         let r = c.ray_for_pixel(100, 50);
 
         assert_eq!(r.origin, Tuple::point(0.0, 2.0, -5.0));
-        let sqrt2 = 2.0_f32.sqrt() / 2.0;
+        let sqrt2 = 2.0_f64.sqrt() / 2.0;
         assert_eq!(r.direction, Tuple::vector(sqrt2, 0.0, -sqrt2));
     }
 }

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tuple_tests {
-    use raytracer::{tuple::Tuple, utils::f32_eq};
+    use raytracer::{tuple::Tuple, utils::f64_eq};
 
     #[test]
     fn point_test() {
@@ -159,8 +159,8 @@ mod tuple_tests {
     fn test_magnitude() {
         assert_eq!(Tuple::vector(0.0, 1.0, 0.0).magnitude(), 1.0);
         assert_eq!(Tuple::vector(0.0, 0.0, 1.0).magnitude(), 1.0);
-        assert_eq!(Tuple::vector(1.0, 2.0, 3.0).magnitude(), 14.0_f32.sqrt());
-        assert_eq!(Tuple::vector(-1.0, -2.0, -3.0).magnitude(), 14.0_f32.sqrt());
+        assert_eq!(Tuple::vector(1.0, 2.0, 3.0).magnitude(), 14.0_f64.sqrt());
+        assert_eq!(Tuple::vector(-1.0, -2.0, -3.0).magnitude(), 14.0_f64.sqrt());
     }
 
     #[test]
@@ -170,7 +170,7 @@ mod tuple_tests {
         assert_eq!(v1.normalize(), v1_normalized);
 
         let v2 = Tuple::vector(1.0, 2.0, 3.0);
-        let sq = 14.0_f32.sqrt();
+        let sq = 14.0_f64.sqrt();
         let v2_normalized = Tuple::vector(1.0 / sq, 2.0 / sq, 3.0 / sq);
         assert_eq!(v2.normalize(), v2_normalized);
     }
@@ -178,14 +178,14 @@ mod tuple_tests {
     #[test]
     fn test_normalized_magnitude() {
         let v1 = Tuple::vector(1.0, 2.0, 3.0);
-        assert!(f32_eq(v1.normalize().magnitude(), 1.0));
+        assert!(f64_eq(v1.normalize().magnitude(), 1.0));
     }
 
     #[test]
     fn test_dot_product() {
         let a = Tuple::vector(1.0, 2.0, 3.0);
         let b = Tuple::vector(2.0, 3.0, 4.0);
-        assert!(f32_eq(a.dot(b), 20.0))
+        assert!(f64_eq(a.dot(b), 20.0))
     }
 
     #[test]

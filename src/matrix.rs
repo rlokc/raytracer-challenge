@@ -1,10 +1,10 @@
 use std::fmt::Debug;
 
-use crate::{tuple::Tuple, utils::f32_eq};
+use crate::{tuple::Tuple, utils::f64_eq};
 
 #[derive(Debug, Clone)]
 pub struct Matrix {
-    pub vals: Vec<Vec<f32>>,
+    pub vals: Vec<Vec<f64>>,
 }
 
 // fn debug_print<T: Debug>(val: T) -> T {
@@ -41,11 +41,11 @@ impl Matrix {
             .map(|line| {
                 line.split_whitespace()
                     .filter(|s| s != &"" && s != &"|")
-                    .map(|val| val.parse::<f32>().unwrap())
-                    .collect::<Vec<f32>>()
+                    .map(|val| val.parse::<f64>().unwrap())
+                    .collect::<Vec<f64>>()
             })
             .filter(|line| !line.is_empty())
-            .collect::<Vec<Vec<f32>>>();
+            .collect::<Vec<Vec<f64>>>();
 
         Matrix { vals: values }
     }
@@ -76,7 +76,7 @@ impl Matrix {
         )
     }
 
-    pub fn get(&self, i: usize, j: usize) -> f32 {
+    pub fn get(&self, i: usize, j: usize) -> f64 {
         self.vals[i][j]
     }
 
@@ -93,7 +93,7 @@ impl Matrix {
         let other_iter = other.vals.iter().flatten();
 
         let mut zipped = self_iter.zip(other_iter);
-        zipped.all(|pair| f32_eq(*pair.0, *pair.1))
+        zipped.all(|pair| f64_eq(*pair.0, *pair.1))
     }
 
     pub fn mat_mul(&self, other: &Matrix) -> Matrix {
@@ -102,7 +102,7 @@ impl Matrix {
 
         for i in 0..self.n_rows() {
             for j in 0..other.n_columns() {
-                let mut acc = 0.0 as f32;
+                let mut acc = 0.0 as f64;
                 for k in 0..self.n_columns() {
                     acc += self.get(i, k) * other.get(k, j);
                 }
@@ -126,11 +126,11 @@ impl Matrix {
         Matrix { vals }
     }
 
-    pub fn determinant(&self) -> f32 {
+    pub fn determinant(&self) -> f64 {
         if self.n_rows() == 2 {
             return self.vals[0][0] * self.vals[1][1] - self.vals[0][1] * self.vals[1][0];
         } else {
-            let mut acc = 0.0 as f32;
+            let mut acc = 0.0 as f64;
             for j in 0..self.n_columns() {
                 acc += self.get(0, j) * self.cofactor(0, j);
             }
@@ -156,11 +156,11 @@ impl Matrix {
         Matrix { vals }
     }
 
-    pub fn minor(&self, row: usize, column: usize) -> f32 {
+    pub fn minor(&self, row: usize, column: usize) -> f64 {
         self.submatrix(row, column).determinant()
     }
 
-    pub fn cofactor(&self, row: usize, column: usize) -> f32 {
+    pub fn cofactor(&self, row: usize, column: usize) -> f64 {
         let minor = self.minor(row, column);
         if (row + column) % 2 == 0 {
             minor
@@ -170,7 +170,7 @@ impl Matrix {
     }
 
     pub fn invert(&self) -> Option<Matrix> {
-        if f32_eq(self.determinant(), 0.0) {
+        if f64_eq(self.determinant(), 0.0) {
             return None;
         }
 
@@ -186,7 +186,7 @@ impl Matrix {
         return Some(Matrix { vals });
     }
 
-    pub fn translate(&self, x: f32, y: f32, z: f32) -> Matrix {
+    pub fn translate(&self, x: f64, y: f64, z: f64) -> Matrix {
         let mut res = Matrix::identity_matrix(self.n_rows());
         res.vals[0][3] = x;
         res.vals[1][3] = y;
@@ -195,7 +195,7 @@ impl Matrix {
         res.mat_mul(&self)
     }
 
-    pub fn scale(&self, x: f32, y: f32, z: f32) -> Matrix {
+    pub fn scale(&self, x: f64, y: f64, z: f64) -> Matrix {
         let mut res = Matrix::identity_matrix(self.n_rows());
 
         res.vals[0][0] = x;
@@ -205,7 +205,7 @@ impl Matrix {
         res.mat_mul(&self)
     }
 
-    pub fn rotate_x(&self, rad: f32) -> Matrix {
+    pub fn rotate_x(&self, rad: f64) -> Matrix {
         let mut res = Matrix::identity_matrix(self.n_rows());
 
         res.vals[1][1] = rad.cos();
@@ -216,7 +216,7 @@ impl Matrix {
         res.mat_mul(&self)
     }
 
-    pub fn rotate_y(&self, rad: f32) -> Matrix {
+    pub fn rotate_y(&self, rad: f64) -> Matrix {
         let mut res = Matrix::identity_matrix(self.n_rows());
 
         res.vals[0][0] = rad.cos();
@@ -227,7 +227,7 @@ impl Matrix {
         res.mat_mul(&self)
     }
 
-    pub fn rotate_z(&self, rad: f32) -> Matrix {
+    pub fn rotate_z(&self, rad: f64) -> Matrix {
         let mut res = Matrix::identity_matrix(self.n_rows());
 
         res.vals[0][0] = rad.cos();
@@ -238,7 +238,7 @@ impl Matrix {
         res.mat_mul(&self)
     }
 
-    pub fn shear(&self, xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
+    pub fn shear(&self, xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix {
         let mut res = Matrix::identity_matrix(self.n_rows());
 
         res.vals[0][1] = xy;
