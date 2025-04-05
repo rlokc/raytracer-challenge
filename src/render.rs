@@ -12,6 +12,8 @@ static GLOBAL_THREAD_COUNT: AtomicUsize = AtomicUsize::new(0);
 pub fn render(camera: Arc<Camera>, world: Arc<World>) -> Canvas {
     let canvas = Arc::new(Mutex::new(Canvas::new(camera.hsize, camera.vsize)));
 
+    assert_ne!(world.light_sources.len(), 0, "World doesn't have any lights");
+
     for y in  0..camera.vsize-1 {
         GLOBAL_THREAD_COUNT.fetch_add(1, Ordering::SeqCst);
         let canvas = canvas.clone();
